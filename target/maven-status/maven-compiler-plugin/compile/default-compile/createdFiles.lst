@@ -1,0 +1,15 @@
+com/ibm/watson/scavenger/speechToText/SpeechToTextWithSession.class
+com/ibm/watson/scavenger/util/PatchedCredentialUtils.class
+com/ibm/watson/scavenger/util/JavaSoundRecorder$1.class
+com/ibm/watson/scavenger/speechToText/SpeechToTextWebSocketMain.class
+com/ibm/watson/scavenger/speechToText/SpeechToTextWithSession$1.class
+com/ibm/watson/scavenger/visualrecognition/ImageAnalysis$Result.class
+com/ibm/watson/scavenger/App.class
+com/ibm/watson/scavenger/visualrecognition/ImageAnalysis$1.class
+com/ibm/watson/scavenger/util/JavaImageCapture$1.class
+com/ibm/watson/scavenger/util/JavaSoundRecorder.class
+com/ibm/watson/scavenger/visualrecognition/ImageAnalysis.class
+com/ibm/watson/scavenger/util/JavaImageCapture.class
+com/ibm/watson/scavenger/speechToText/SpeechToTextWebSocketMain$1.class
+com/ibm/watson/scavenger/speechToText/SpeechToTextWebSocketMain$MicrophoneRecognizeDelegate.class
+com/ibm/watson/scavenger/textToSpeech/TTSMain.class
