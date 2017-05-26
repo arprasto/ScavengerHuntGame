@@ -193,8 +193,8 @@ public class JavaImageCapture extends JFrame implements Runnable, WebcamListener
 	 
 	public void webcamDisposed(WebcamEvent we) {
 		System.out.println("webcam disposed");
-		//App.getInstance().tts.playTextToSpeech("Thanks for using this application. Hoping to see you soon on IBM Watson bluemix platform.");
 		picker.getSelectedWebcam().shutdown();
+		App.getInstance().tts.playTextToSpeech("Thanks for using this application. Hoping to see you soon on IBM Watson bluemix platform.");
 	}
 
 	 
