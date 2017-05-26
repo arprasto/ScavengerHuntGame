@@ -125,11 +125,4 @@ public class SpeechToTextWebSocketMain {
 		}
     }
     
-    public static void main( String[] args ) throws Exception
-    {
-    	//SpeechToTextWebSocketMain stt = new SpeechToTextWebSocketMain(ScavengerPropLoader.getInstance().getCred("STT_uname"),ScavengerPropLoader.getInstance().getCred("STT_pass"));
-    	//SpeechToTextWebSocketMain stt = new SpeechToTextWebSocketMain("dd032ab8-6229-4a0c-8c3f-1dccf322145a","XocT4fgOKyKR");
-    	//stt.startSTT();
-    }
-
 }
