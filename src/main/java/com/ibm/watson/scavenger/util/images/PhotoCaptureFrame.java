@@ -5,7 +5,10 @@ import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.io.IOException;
 import java.net.MalformedURLException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.logging.Logger;
 
 import javax.swing.BoxLayout;
@@ -14,9 +17,9 @@ import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.filechooser.FileFilter;
 
 import com.ibm.watson.scavenger.App;
+import com.ibm.watson.scavenger.util.ScavengerContants;
 import com.ibm.watson.scavenger.util.SharedResources;
 
 public class PhotoCaptureFrame extends JFrame {
@@ -44,7 +47,7 @@ public class PhotoCaptureFrame extends JFrame {
 		        try {
 		            if (res == JFileChooser.APPROVE_OPTION) {
 		                File file = fc.getSelectedFile();
-		                SharedResources.getCapturedImageList().add(file);
+		                SharedResources.sharedCache.getCapturedImageList().add(file);
 		            }
 		        }catch (Exception iOException) {
 		        }
@@ -62,6 +65,22 @@ public class PhotoCaptureFrame extends JFrame {
         f.setResizable(false);
         f.setPreferredSize(new Dimension(dim.width/2-30,dim.height-60));
         f.setVisible(true);
+        
+		Thread dirWatchThread = new Thread(){
+
+		@Override
+		public void run() {
+			try{
+			Path dir = Paths.get(ScavengerContants.tmp_image_dir.toURI());
+	        new WatchDir(dir, false).processEvents();
+			}catch(IOException e){
+				e.printStackTrace();
+			}
+		}
+		
+		};
+		dirWatchThread.start();
+
 	}
 	
 	public static JPanel getJPanel()
@@ -98,20 +117,3 @@ public class PhotoCaptureFrame extends JFrame {
 		
 	}
 }
-
-class JPEGImageFileFilter extends FileFilter implements java.io.FileFilter
-{
-public boolean accept(File f)
-  {
-  if (f.getName().toLowerCase().endsWith(".jpeg")) return true;
-  if (f.getName().toLowerCase().endsWith(".jpg")) return true;
-  if (f.getName().toLowerCase().endsWith(".png")) return true;
-  if(f.isDirectory())return true;
-  return false;
- }
-public String getDescription()
-  {
-  return "JPEG/PNG files";
-  }
-
-} 

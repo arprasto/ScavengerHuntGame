@@ -13,12 +13,13 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.Thread.UncaughtExceptionHandler;
 import java.lang.reflect.InvocationTargetException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.imageio.ImageIO;
 import javax.swing.BoxLayout;
-import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -36,9 +37,9 @@ import com.github.sarxos.webcam.WebcamPanel;
 import com.github.sarxos.webcam.WebcamPicker;
 import com.github.sarxos.webcam.WebcamResolution;
 import com.ibm.watson.scavenger.App;
-import com.ibm.watson.scavenger.util.SharedResources;
-import com.ibm.watson.scavenger.util.images.Photo;
+import com.ibm.watson.scavenger.util.ScavengerContants;
 import com.ibm.watson.scavenger.util.images.PhotoCaptureFrame;
+import com.ibm.watson.scavenger.util.images.WatchDir;
 
 
 /**
@@ -130,9 +131,10 @@ public class JavaImageCapture extends JFrame implements Runnable, WebcamListener
 				statusLabel.setText("capturing image please wait");
 				BufferedImage image = webcam.getImage();
 				try {
-					File capturedImage = File.createTempFile("cap1",".jpg");
+					File capturedImage = File.createTempFile("cap1",".jpg",ScavengerContants.tmp_image_dir);
 					ImageIO.write(image, "JPG",capturedImage);
-					SharedResources.getCapturedImageList().add(capturedImage);					
+					System.out.println(capturedImage.getPath());
+					
 				} catch (IOException e1) {
 					e1.printStackTrace();
 				}
@@ -179,8 +181,6 @@ public class JavaImageCapture extends JFrame implements Runnable, WebcamListener
 	public void webcamOpen(WebcamEvent we) {
 		System.out.println("webcam open");
 		PhotoCaptureFrame.getJFrame().setVisible(true);
-		//add(new ImageCaptureButton().getButton(),BorderLayout.CENTER);
-
 	}
 
 	 

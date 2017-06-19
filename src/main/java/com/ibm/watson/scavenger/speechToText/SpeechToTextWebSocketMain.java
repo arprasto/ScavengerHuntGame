@@ -108,7 +108,8 @@ public class SpeechToTextWebSocketMain {
                 	JavaImageCapture startCap = new JavaImageCapture();
 						SwingUtilities.invokeLater(startCap);
                 }
-                if(text.toLowerCase().contains("i am done") || text.toLowerCase().contains("exit") || text.toLowerCase().contains("i'm done"))
+                if(text.toLowerCase().contains("i am done") || text.toLowerCase().contains("exit") || text.toLowerCase().contains("i'm done") || 
+                		text.toLowerCase().contains("close"))
                 {
                 	App.getInstance().tts.playTextToSpeech("Thanks for using this application. Hoping to see you soon on IBM Watson bluemix platform.");
                 	System.exit(0);
