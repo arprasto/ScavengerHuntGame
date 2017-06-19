@@ -1,8 +1,0 @@
-/Users/arpitrastogi/Documents/eclipse_workspace/scavengerHunt/src/main/java/com/ibm/watson/scavenger/App.java
-/Users/arpitrastogi/Documents/eclipse_workspace/scavengerHunt/src/main/java/com/ibm/watson/scavenger/textToSpeech/TTSMain.java
-/Users/arpitrastogi/Documents/eclipse_workspace/scavengerHunt/src/main/java/com/ibm/watson/scavenger/speechToText/SpeechToTextWebSocketMain.java
-/Users/arpitrastogi/Documents/eclipse_workspace/scavengerHunt/src/main/java/com/ibm/watson/scavenger/speechToText/SpeechToTextWithSession.java
-/Users/arpitrastogi/Documents/eclipse_workspace/scavengerHunt/src/main/java/com/ibm/watson/scavenger/visualrecognition/ImageAnalysis.java
-/Users/arpitrastogi/Documents/eclipse_workspace/scavengerHunt/src/main/java/com/ibm/watson/scavenger/util/JavaImageCapture.java
-/Users/arpitrastogi/Documents/eclipse_workspace/scavengerHunt/src/main/java/com/ibm/watson/scavenger/util/PatchedCredentialUtils.java
-/Users/arpitrastogi/Documents/eclipse_workspace/scavengerHunt/src/main/java/com/ibm/watson/scavenger/util/JavaSoundRecorder.java
