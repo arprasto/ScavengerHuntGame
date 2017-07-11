@@ -52,7 +52,7 @@ a. Register your IoT device on WatsonIoTPlatform:
 	1. goto your Bluemix services catalog and click IOT-service created in previous step.
 	2. On this page you will see Launch button, click this. This will open saperate IBM Watson IoT Platform home page for your service.
 	3. Select DEVICES option in left menu panel.
-	4. Click on "+Add Device" button. Now follow the steps mentioned <a href="https://console.bluemix.net/docs/services/IoT/iotplatform_task.html#iotplatform_task">here</a>
+	4. Click on "+Add Device" button. Now follow the steps mentioned here: https://console.bluemix.net/docs/services/IoT/iotplatform_task.html#iotplatform_task'
 	5. Once you register your device update below to your properties file which we will create in next step:
 
 		Organization ID xxxx
@@ -70,7 +70,7 @@ b. create Node-Red device to receive events/send notification back to IoT device
 	5. In pop up input dialog copy and paste from NodeRedJsIoTReciever.json file attached with this code base.
 	6. Click on 'Deploy' button. 
 
-How to run it:
+How to build and run it:
 
 1. Create an properties file similar to sample-properties.properties provided.
 2. Update Watson bluemix credentials in for each service in above created property file.
