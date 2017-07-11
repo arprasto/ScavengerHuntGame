@@ -48,6 +48,7 @@ Pre Requisite:
 Before you begin:
 
 a. Register your IoT device on WatsonIoTPlatform:
+
 	1. goto your Bluemix services catalog and click IOT-service created in previous step.
 	2. On this page you will see Launch button, click this. This will open saperate IBM Watson IoT Platform home page for your service.
 	3. Select DEVICES option in left menu panel.
@@ -61,6 +62,7 @@ a. Register your IoT device on WatsonIoTPlatform:
 		Authentication Token xxxxxx
 
 b. create Node-Red device to receive events/send notification back to IoT device.
+
 	1. goto the home page of boilerplate app created in Pre Requisite steps.
 	2. click "overview" menu option in left page panel.
 	3. on curren page you will see "Visit App URL" hyper link. This will load your Node-Red editor in saperate page.
