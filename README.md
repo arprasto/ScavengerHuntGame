@@ -61,7 +61,7 @@ a. Register your IoT device on WatsonIoTPlatform:
 		Authentication xxxxxx
 		Authentication Token xxxxxx
 
-b. create Node-Red device to receive events/send notification back to IoT device.
+b. create Node-Red device simulator to receive events/send notification back to IoT device.
 
 	1. goto the home page of boilerplate app created in Pre Requisite steps.
 	2. click "overview" menu option in left page panel.
