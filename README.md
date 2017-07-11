@@ -52,7 +52,7 @@ a. Register your IoT device on WatsonIoTPlatform:
 	1. goto your Bluemix services catalog and click IOT-service created in previous step.
 	2. On this page you will see Launch button, click this. This will open saperate IBM Watson IoT Platform home page for your service.
 	3. Select DEVICES option in left menu panel.
-	4. Click on "+Add Device" button. Now follow the steps mentioned here(https://console.bluemix.net/docs/services/IoT/iotplatform_task.html#iotplatform_task)
+	4. Click on "+Add Device" button. Now follow the steps mentioned <a href="https://console.bluemix.net/docs/services/IoT/iotplatform_task.html#iotplatform_task">here</a>
 	5. Once you register your device update below to your properties file which we will create in next step:
 
 		Organization ID xxxx
