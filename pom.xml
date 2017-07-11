@@ -6,6 +6,7 @@
   <artifactId>scavengerHunt</artifactId>
   <version>0.0.1-SNAPSHOT</version>
   <packaging>jar</packaging>
+  
 
   <name>scavengerHunt</name>
   <url>http://maven.apache.org</url>
@@ -24,12 +25,17 @@
     	<artifactId>java-sdk</artifactId>
     	<version>3.8.0</version>
 	</dependency>
-    <dependency>
+    <!-- dependency>
       <groupId>javax</groupId>
       <artifactId>javaee-api</artifactId>
       <version>7.0</version>
       <scope>provided</scope>
-    </dependency>
+    </dependency-->
+    <dependency>
+	    <groupId>com.ibm.messaging</groupId>
+	    <artifactId>watson-iot</artifactId>
+	    <version>0.2.4</version>
+	</dependency>
     <dependency>
       <groupId>org.apache.wink</groupId>
       <artifactId>wink-common</artifactId>
@@ -44,12 +50,50 @@
     <groupId>com.google.code.gson</groupId>
     <artifactId>gson</artifactId>
     <version>2.8.0</version>
-</dependency>
+	</dependency>
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
       <version>3.8.1</version>
       <scope>test</scope>
     </dependency>
+	<dependency>
+	  <groupId>com.cloudant</groupId>
+	  <artifactId>cloudant-client</artifactId>
+	  <version>2.9.0</version>
+	</dependency>
+	<dependency>
+	  <groupId>com.squareup.okhttp3</groupId>
+	  <artifactId>okhttp-urlconnection</artifactId>
+	  <version>3.4.2</version>
+	</dependency>
   </dependencies>
+  
+  <build>
+  <plugins>
+    <plugin>
+        <artifactId>maven-assembly-plugin</artifactId>
+        <version>3.0.0</version>
+        <executions>
+          <execution>
+            <id>distro-assembly</id>
+            <phase>package</phase>
+            <goals>
+              <goal>single</goal>
+            </goals>
+	        <configuration>
+	          <descriptorRefs>
+	          	<descriptorRef>jar-with-dependencies</descriptorRef>
+	          </descriptorRefs>
+	      <archive>
+            <manifest>
+              <mainClass>com.ibm.watson.scavenger.LaunchApp</mainClass>
+            </manifest>
+          </archive>
+	        </configuration>
+          </execution>
+        </executions>
+      </plugin>
+  </plugins>
+  </build>
 </project>

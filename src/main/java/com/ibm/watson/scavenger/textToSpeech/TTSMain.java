@@ -1,3 +1,20 @@
+/**
+ *****************************************************************************
+ * Copyright (c) 2017 IBM Corporation and other Contributors.
+
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * Arpit Rastogi - Initial Contribution
+ *****************************************************************************
+ */
+/*
+ * Main Text to Speech util class to connect it to Bluemix TTS service and playing audio using IoT device.
+ */
+
 package com.ibm.watson.scavenger.textToSpeech;
 
 import java.io.File;
@@ -5,39 +22,24 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.Base64;
-import java.util.concurrent.CountDownLatch;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.sound.sampled.AudioFormat;
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.Clip;
-import javax.sound.sampled.LineEvent;
-import javax.sound.sampled.LineListener;
-import javax.sound.sampled.LineUnavailableException;
-import javax.sound.sampled.UnsupportedAudioFileException;
-
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import com.ibm.watson.developer_cloud.text_to_speech.v1.TextToSpeech;
 import com.ibm.watson.developer_cloud.text_to_speech.v1.model.Voice;
 import com.ibm.watson.developer_cloud.text_to_speech.v1.util.WaveUtils;
-import com.ibm.watson.scavenger.App;
-import com.ibm.watson.scavenger.util.CommandsUtils;
 import com.ibm.watson.scavenger.util.ScavengerContants;
 import com.ibm.watson.scavenger.util.sound.JavaSoundPlayer;
 
 public class TTSMain {
 
-	public static void main(String[] args) throws LineUnavailableException, IOException, UnsupportedAudioFileException {
+	/*public static void main(String[] args) throws LineUnavailableException, IOException, UnsupportedAudioFileException {
 		
 		
 		TTSMain obj = new TTSMain(ScavengerContants.TTS_uname,ScavengerContants.TTS_pass);
 		obj.playTextToSpeech("Hello ! I am IBM watson artificially intelligent assisstence. "
 				+ "To start the application you can say the keyword like game or scavenger hunt game or hunt game");
-	}
+	}*/
 	
 	Logger LOG = Logger.getLogger(TTSMain.class.getName());
 	
@@ -53,7 +55,7 @@ public class TTSMain {
 		
 	}
 	
-	public void playTextToSpeechUsingWhisk(String txt){
+	/*public void playTextToSpeechUsingWhisk(String txt){
     	String tmpStr = new CommandsUtils().executeCommand("/usr/local/bin/wsk","action", "invoke", "WatsonTTS", "--param", "message", txt);
     	String activationID = tmpStr.split(" ")[tmpStr.split(" ").length-1];
     	//System.out.println(activationID);
@@ -77,12 +79,12 @@ public class TTSMain {
 		        e.printStackTrace();
 		    }
 
-	}
+	}*/
 	
 	public void playTextToSpeech(String txt){
 		
 		
-        InputStream stream = service.synthesize(txt, new Voice("en-US_LisaVoice","female","en-US"),
+        InputStream stream = service.synthesize(txt, new Voice(ScavengerContants.TTS_name,ScavengerContants.TTS_gender,ScavengerContants.TTS_language),
         		new com.ibm.watson.developer_cloud.text_to_speech.v1.model.AudioFormat("audio/wav")).execute();
         InputStream in=null;
         OutputStream out=null;
@@ -109,7 +111,6 @@ public class TTSMain {
 	        in.close();
 	        stream.close();	
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}

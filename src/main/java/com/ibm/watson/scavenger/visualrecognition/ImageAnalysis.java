@@ -1,5 +1,5 @@
 /**
- * Copyright 2016 IBM Corp. All Rights Reserved.
+ * Copyright 2017 IBM Corp. All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
@@ -11,6 +11,10 @@
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
  */
+/*
+ * VR utility class to perform Image Recognition related tasks.
+ * calls the Face detection, Image Keyword and Scene text for each passed image.
+ */
 package com.ibm.watson.scavenger.visualrecognition;
 
 import java.io.File;
@@ -18,15 +22,17 @@ import java.io.FileInputStream;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
-import javax.faces.view.facelets.FaceletsResourceResolver;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonParser;
 import com.ibm.watson.developer_cloud.visual_recognition.v3.VisualRecognition;
 import com.ibm.watson.developer_cloud.visual_recognition.v3.model.ClassifyImagesOptions;
 import com.ibm.watson.developer_cloud.visual_recognition.v3.model.DetectedFaces;
@@ -39,7 +45,9 @@ import com.ibm.watson.developer_cloud.visual_recognition.v3.model.VisualClassifi
 import com.ibm.watson.developer_cloud.visual_recognition.v3.model.VisualClassifier;
 import com.ibm.watson.developer_cloud.visual_recognition.v3.model.VisualClassifier.VisualClass;
 import com.ibm.watson.developer_cloud.visual_recognition.v3.model.VisualRecognitionOptions;
+import com.ibm.watson.scavenger.util.CommandsUtils;
 import com.ibm.watson.scavenger.util.PatchedCredentialUtils;
+import com.ibm.watson.scavenger.util.ScavengerContants;
 
 public class ImageAnalysis {
 
@@ -47,10 +55,11 @@ public class ImageAnalysis {
 
   private final Gson gson = new GsonBuilder().setPrettyPrinting().create();
   private final VisualRecognition vision;
+  private List<String> classifiers_lst = new ArrayList<String>(); 
 
   public ImageAnalysis(String apiKey) {
     // API key is automatically retrieved from VCAP_SERVICES by the Watson SDK
-    vision = new VisualRecognition(VisualRecognition.VERSION_DATE_2016_05_20);
+    vision = new VisualRecognition(ScavengerContants.vr_version);
 
     // get the key from the VCAP_SERVICES as workaround for
     // https://github.com/watson-developer-cloud/java-sdk/issues/371
@@ -59,6 +68,7 @@ public class ImageAnalysis {
     // Allow a developer running locally to override the API key with
     // an environment variable. When working with Liberty, it can be defined
     // in server.env.
+    classifiers_lst.add("default");
     if (apiKey != null) {
       vision.setApiKey(apiKey);
     }
@@ -79,7 +89,7 @@ public class ImageAnalysis {
       Files.copy(fileInput, tmpFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
 
       VisualRecognitionOptions options = new VisualRecognitionOptions.Builder().images(tmpFile).build();
-      ClassifyImagesOptions classifyOptions = new ClassifyImagesOptions.Builder().images(tmpFile).build();
+      ClassifyImagesOptions classifyOptions = new ClassifyImagesOptions.Builder().classifierIds(classifiers_lst).images(tmpFile).build();
 
       Result result = analyze(options, classifyOptions);
       System.out.println("analysis result "+gson.toJson(result));
@@ -99,12 +109,14 @@ public class ImageAnalysis {
 
 	      LOGGER.severe("Analyzing a binary file " + tmpFile);
 	      Files.copy(fileInput, tmpFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+	      
+	      loadClassifiers();
 
 	      VisualRecognitionOptions options = new VisualRecognitionOptions.Builder().images(tmpFile).build();
-	      ClassifyImagesOptions classifyOptions = new ClassifyImagesOptions.Builder().images(tmpFile).build();
+	      ClassifyImagesOptions classifyOptions = new ClassifyImagesOptions.Builder().classifierIds(classifiers_lst).images(tmpFile).build();
 
 	      Result result = analyze(options, classifyOptions);
-	      System.out.println("analysis result "+gson.toJson(result));
+	      LOGGER.info("analysis result "+gson.toJson(result));
 	      
 	      StringBuffer result_sb = new StringBuffer();
 	      result_sb.append("<html><body>");
@@ -159,6 +171,7 @@ public class ImageAnalysis {
     LOGGER.info("Calling Image Keyword...");
     try {
       VisualClassification execute = vision.classify(classifyOptions).execute();
+      System.out.println(execute);
       List<ImageClassification> imageClassifiers = execute.getImages();
       if (!imageClassifiers.isEmpty()) {
         result.keywords = imageClassifiers.get(0).getClassifiers();
@@ -186,6 +199,18 @@ public class ImageAnalysis {
     List<Face> faces;
     List<VisualClassifier> keywords;
     ImageText sceneText;
+  }
+  
+  private void loadClassifiers()
+  {
+		String classifiers = new CommandsUtils().executeCommand("bash","-c","curl -X GET \""+ScavengerContants.vr_classifier_uri+"?version="+ScavengerContants.vr_version+"&api_key="+ScavengerContants.vr_APIKey+"\"");
+		JsonArray classifier_arr = new JsonParser().parse(classifiers.toLowerCase()).getAsJsonObject().get("classifiers").getAsJsonArray();
+		for(int i=0;i<classifier_arr.size();i++){
+			if(classifier_arr.get(i).getAsJsonObject().get("status").getAsString().equals("ready")){
+				classifiers_lst.add(classifier_arr.get(i).getAsJsonObject().get("classifier_id").getAsString());
+				LOGGER.info("classifier added : "+classifier_arr.get(i).getAsJsonObject().get("classifier_id").getAsString());
+			}
+		}
   }
 
 }

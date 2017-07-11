@@ -1,3 +1,19 @@
+/**
+ *****************************************************************************
+ * Copyright (c) 2017 IBM Corporation and other Contributors.
+
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * Arpit Rastogi - Initial Contribution
+ *****************************************************************************
+ */
+/*
+ * utility class to play audio wav file received from TTS bluemix service
+ */
 package com.ibm.watson.scavenger.util.sound;
 
 import java.io.File;
@@ -82,10 +98,8 @@ public class JavaSoundPlayer {
 		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (UnsupportedAudioFileException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} finally {
 	        try {

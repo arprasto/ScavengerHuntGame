@@ -1,3 +1,20 @@
+/**
+ *****************************************************************************
+ * Copyright (c) 2017 IBM Corporation and other Contributors.
+
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * Arpit Rastogi - Initial Contribution
+ *****************************************************************************
+ */
+/*
+ * Utility class to provide capability to execute shell commands through java.
+ */
+
 package com.ibm.watson.scavenger.util;
 
 import java.io.BufferedReader;
@@ -6,8 +23,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import com.ibm.watson.scavenger.textToSpeech.TTSMain;
 
 public class CommandsUtils {
 	Logger LOG = Logger.getLogger(CommandsUtils.class.getName());
@@ -45,11 +60,9 @@ public class CommandsUtils {
     	LOG.log(Level.INFO, "retreiving result for "+command.toString()+" : ");
 
     	while ((line = br.readLine()) != null) {
-    	  //System.out.println(line);
     	  output.append(line);
     	}
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
     	LOG.log(Level.INFO, "Output of running "+output.toString());

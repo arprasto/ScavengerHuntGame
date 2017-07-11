@@ -1,6 +1,24 @@
+/**
+ *****************************************************************************
+ * Copyright (c) 2017 IBM Corporation and other Contributors.
+
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * Arpit Rastogi - Initial Contribution
+ *****************************************************************************
+ */
+/*
+ * Main class for speech to text using Web Socket Mecahnism
+ * used with default configuration configured for EN-US
+ *  
+ */
+
 package com.ibm.watson.scavenger.speechToText;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -19,7 +37,7 @@ import com.ibm.watson.developer_cloud.speech_to_text.v1.model.RecognitionCallbac
 import com.ibm.watson.developer_cloud.speech_to_text.v1.model.RecognizeOptions;
 import com.ibm.watson.developer_cloud.speech_to_text.v1.model.SpeechResults;
 import com.ibm.watson.developer_cloud.speech_to_text.v1.websocket.RecognizeCallback;
-import com.ibm.watson.scavenger.App;
+import com.ibm.watson.scavenger.PredictionApp;
 import com.ibm.watson.scavenger.util.ScavengerContants;
 import com.ibm.watson.scavenger.util.camera.JavaImageCapture;
 
@@ -105,13 +123,14 @@ public class SpeechToTextWebSocketMain {
                 LOGGER.log(Level.INFO,text);
                 if(text.toLowerCase().contains("game") || text.toLowerCase().contains("hunt game") || text.toLowerCase().contains("scavenger"))
                 {
-                	JavaImageCapture startCap = new JavaImageCapture();
+                	JavaImageCapture startCap = new JavaImageCapture(ScavengerContants.vr_process_img_dir,"tmp",PredictionApp.getInstance());
 						SwingUtilities.invokeLater(startCap);
                 }
                 if(text.toLowerCase().contains("i am done") || text.toLowerCase().contains("exit") || text.toLowerCase().contains("i'm done") || 
                 		text.toLowerCase().contains("close"))
                 {
-                	App.getInstance().tts.playTextToSpeech("Thanks for using this application. Hoping to see you soon on IBM Watson bluemix platform.");
+                	PredictionApp.getInstance().tts.playTextToSpeech("Thanks for using this application. Hoping to see you soon on IBM Watson bluemix platform.");
+                	PredictionApp.getInstance().iotObj.closeIOTConnection();
                 	System.exit(0);
                 }
             }

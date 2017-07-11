@@ -1,7 +1,26 @@
+/**
+ *****************************************************************************
+ * Copyright (c) 2017 IBM Corporation and other Contributors.
+
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * Arpit Rastogi - Initial Contribution
+ *****************************************************************************
+ */
+/*
+ * Directory Watcher to observe the NEW and modify event of directory specified in tmp_image_dir_path property.
+ * also publishes the event to IoT using iot_event_for_img_base64 specified in properties file.
+ */
+
 package com.ibm.watson.scavenger.util.images;
 
 import static java.nio.file.LinkOption.NOFOLLOW_LINKS;
 import static java.nio.file.StandardWatchEventKinds.ENTRY_CREATE;
+import static java.nio.file.StandardWatchEventKinds.ENTRY_MODIFY;
 import static java.nio.file.StandardWatchEventKinds.OVERFLOW;
 
 import java.io.File;
@@ -19,6 +38,8 @@ import java.nio.file.attribute.BasicFileAttributes;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.google.gson.JsonObject;
+import com.ibm.watson.scavenger.PredictionApp;
 import com.ibm.watson.scavenger.util.ScavengerContants;
  
 /**
@@ -42,7 +63,7 @@ public class WatchDir {
      */
     private void register(Path dir) throws IOException {
         //WatchKey key = dir.register(watcher, ENTRY_CREATE, ENTRY_DELETE, ENTRY_MODIFY);
-        WatchKey key = dir.register(watcher, ENTRY_CREATE);
+        WatchKey key = dir.register(watcher, ENTRY_CREATE,ENTRY_MODIFY);
         if (trace) {
             Path prev = keys.get(key);
             if (prev == null) {
@@ -129,8 +150,25 @@ public class WatchDir {
                 // print out event
                 System.out.format("%s: %s\n", event.kind().name(), child);
                 
-                if(child.toString().endsWith(".jpg") || child.toString().endsWith(".jpeg") || child.toString().endsWith(".png")){
-                	PhotoCaptureFrame.updateCaptureFrame(new File(child.toUri()));
+                if((child.toString().endsWith(".jpg") || child.toString().endsWith(".jpeg") || child.toString().endsWith(".png")) &&
+                		child.toString().contains(ScavengerContants.vr_process_img_dir_path))
+                {
+                	//PhotoCaptureFrame.updateCaptureFrame(new File(child.toUri()));
+
+                	//File f=new File(child.toUri());
+                	//PredictionApp.getInstance().dbsvc.saveIMGBase64(new JSonDocumentTemplateClass(f.getName(),new Base64EncoderDecoder().encodeFileToBase64Binary(f)));
+                	
+            		JsonObject event_payload = new JsonObject();
+            		event_payload.addProperty("img_base64",new Base64EncoderDecoder().encodeFileToBase64Binary(new File(child.toUri())));
+            		event_payload.addProperty("img_id", new File(child.toUri()).getName());
+            		event_payload.addProperty("_id",new File(child.toUri()).getName());
+                	PredictionApp.getInstance().iotObj.publishEvent(event_payload);
+                }
+                
+                if((child.toString().endsWith(".jpg") || child.toString().endsWith(".jpeg") || child.toString().endsWith(".png")) &&
+                		child.toString().contains(ScavengerContants.vr_train_img_dir_path))
+                {
+                	//any watcher stuff
                 }
  
                 // if directory is created, and watching recursively, then
@@ -164,9 +202,4 @@ public class WatchDir {
         System.exit(-1);
     }
  
-    public static void main(String[] args) throws IOException {
-        // register directory and process its events
-        Path dir = Paths.get(ScavengerContants.tmp_image_dir.toURI());
-        new WatchDir(dir, false).processEvents();
-    }
 }

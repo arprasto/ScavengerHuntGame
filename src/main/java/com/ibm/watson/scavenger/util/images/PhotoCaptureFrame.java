@@ -1,3 +1,21 @@
+/**
+ *****************************************************************************
+ * Copyright (c) 2017 IBM Corporation and other Contributors.
+
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * Arpit Rastogi - Initial Contribution
+ *****************************************************************************
+ */
+/*
+ * Camera capture (Prediction window) class to display the VR results with image as icon.
+ * also calls the VR service for each image.
+ */
+
 package com.ibm.watson.scavenger.util.images;
 
 import java.awt.Dimension;
@@ -5,10 +23,7 @@ import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
-import java.io.IOException;
 import java.net.MalformedURLException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.logging.Logger;
 
 import javax.swing.BoxLayout;
@@ -18,9 +33,9 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
-import com.ibm.watson.scavenger.App;
+import com.ibm.watson.scavenger.PredictionApp;
+import com.ibm.watson.scavenger.util.CommandsUtils;
 import com.ibm.watson.scavenger.util.ScavengerContants;
-import com.ibm.watson.scavenger.util.SharedResources;
 
 public class PhotoCaptureFrame extends JFrame {
 	JPanel jp = null;
@@ -47,7 +62,8 @@ public class PhotoCaptureFrame extends JFrame {
 		        try {
 		            if (res == JFileChooser.APPROVE_OPTION) {
 		                File file = fc.getSelectedFile();
-		                SharedResources.sharedCache.getCapturedImageList().add(file);
+		                //SharedResources.sharedCache.getCapturedImageList().add(file);
+		                new CommandsUtils().executeCommand("bash","-c","cp "+file.getPath()+" "+ScavengerContants.vr_process_img_dir_path);
 		            }
 		        }catch (Exception iOException) {
 		        }
@@ -65,22 +81,6 @@ public class PhotoCaptureFrame extends JFrame {
         f.setResizable(false);
         f.setPreferredSize(new Dimension(dim.width/2-30,dim.height-60));
         f.setVisible(true);
-        
-		Thread dirWatchThread = new Thread(){
-
-		@Override
-		public void run() {
-			try{
-			Path dir = Paths.get(ScavengerContants.tmp_image_dir.toURI());
-	        new WatchDir(dir, false).processEvents();
-			}catch(IOException e){
-				e.printStackTrace();
-			}
-		}
-		
-		};
-		dirWatchThread.start();
-
 	}
 	
 	public static JPanel getJPanel()
@@ -102,8 +102,8 @@ public class PhotoCaptureFrame extends JFrame {
 	public static void updateCaptureFrame(File capturedImgFile)
 	{
 		
-		String result = App.getInstance().imgsvc.analyzeImageJSon(capturedImgFile);
-		System.out.println(result);
+		String result = PredictionApp.getInstance().imgsvc.analyzeImageJSon(capturedImgFile);
+		//System.out.println(result);
 		
 		Photo photo=null;
 		try {
@@ -114,6 +114,5 @@ public class PhotoCaptureFrame extends JFrame {
 		PhotoCaptureFrame.getJPanel().add(photo);
 		PhotoCaptureFrame.getJFrame().repaint();
 		PhotoCaptureFrame.getJFrame().setVisible(true);
-		
 	}
 }
