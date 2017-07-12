@@ -32,11 +32,11 @@ public class DBCommunicator {
 	Logger logger = Logger.getLogger(DBCommunicator.class.getName());
 	CloudantClient client = null;
 	Database db = null;
-	public DBCommunicator() throws MalformedURLException{
+	public DBCommunicator(String uname, String pass, String url) throws MalformedURLException{
 		client = ClientBuilder.account("Scavenger")
-	            .username(ScavengerContants.cloudant_uname)
-	            .password(ScavengerContants.cloudant_pass)
-	            .url(new URL(ScavengerContants.cloudant_url))
+	            .username(uname)
+	            .password(pass)
+	            .url(new URL(url))
 	            .build();
 		
 		db = client.database(ScavengerContants.cloudant_dbName, true);

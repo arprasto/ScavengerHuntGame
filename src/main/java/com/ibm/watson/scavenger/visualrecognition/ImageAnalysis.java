@@ -63,7 +63,7 @@ public class ImageAnalysis {
 
     // get the key from the VCAP_SERVICES as workaround for
     // https://github.com/watson-developer-cloud/java-sdk/issues/371
-    vision.setApiKey(PatchedCredentialUtils.getAPIKey("watson_vision_combined"));
+    vision.setApiKey(PatchedCredentialUtils.getVRAPIKey(null));
 
     // Allow a developer running locally to override the API key with
     // an environment variable. When working with Liberty, it can be defined

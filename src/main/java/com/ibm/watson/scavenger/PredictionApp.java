@@ -56,9 +56,9 @@ public class PredictionApp
     public ImageAnalysis imgsvc = null;
     public DBCommunicator dbsvc = null;
     public IoTUtil iotObj = null;
-    void startGame()
+    
+    public void loadServices() throws MalformedURLException
     {
-    	try{
     	/* startup all Below watson services:
     	 * 
     	 * a. IBM Watson Text to Speech
@@ -70,9 +70,14 @@ public class PredictionApp
 		tts = new TTSMain(ScavengerContants.TTS_uname,ScavengerContants.TTS_pass);
 		stt = new SpeechToTextWebSocketMain(ScavengerContants.STT_uname,ScavengerContants.STT_pass);
 		imgsvc = new ImageAnalysis(ScavengerContants.vr_APIKey); 
-		dbsvc = new DBCommunicator();
+		dbsvc = new DBCommunicator(ScavengerContants.cloudant_uname,ScavengerContants.cloudant_pass,ScavengerContants.cloudant_url);
 		iotObj = new IoTUtil();
-
+    	
+    }
+    void startGame()
+    {
+    	try{
+    		loadServices();
 		tts.playTextToSpeech("welcome to IBM bluemix platform. To start the game you can say the keyword like. game. scavenger hunt game. hunt game. To end the game anytime you can say the keyword like. exit. i am done. or even please exit.");
 		
 		Thread hearingThread = new Thread() {
