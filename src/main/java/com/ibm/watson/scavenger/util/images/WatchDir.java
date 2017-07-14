@@ -162,6 +162,8 @@ public class WatchDir {
             		event_payload.addProperty("img_base64",new Base64EncoderDecoder().encodeFileToBase64Binary(new File(child.toUri())));
             		event_payload.addProperty("img_id", new File(child.toUri()).getName());
             		event_payload.addProperty("_id",new File(child.toUri()).getName());
+            		
+            		event_payload.addProperty("img_result_html",PredictionApp.getInstance().imgsvc.analyzeImageJSon(new File(child.toUri())));
                 	PredictionApp.getInstance().iotObj.publishEvent(event_payload);
                 }
                 

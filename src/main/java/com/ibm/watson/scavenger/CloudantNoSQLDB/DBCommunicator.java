@@ -26,20 +26,19 @@ import java.util.logging.Logger;
 import com.cloudant.client.api.ClientBuilder;
 import com.cloudant.client.api.CloudantClient;
 import com.cloudant.client.api.Database;
-import com.ibm.watson.scavenger.util.ScavengerContants;
 
 public class DBCommunicator {
 	Logger logger = Logger.getLogger(DBCommunicator.class.getName());
 	CloudantClient client = null;
 	Database db = null;
-	public DBCommunicator(String uname, String pass, String url) throws MalformedURLException{
+	public DBCommunicator(String uname, String pass, String url,String db_name) throws MalformedURLException{
 		client = ClientBuilder.account("Scavenger")
 	            .username(uname)
 	            .password(pass)
 	            .url(new URL(url))
 	            .build();
 		
-		db = client.database(ScavengerContants.cloudant_dbName, true);
+		db = client.database(db_name, true);
 	}
 
 	public void saveIMGBase64(JSonDocumentTemplateClass obj){

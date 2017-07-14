@@ -55,11 +55,15 @@ public class ImageAnalysis {
 
   private final Gson gson = new GsonBuilder().setPrettyPrinting().create();
   private final VisualRecognition vision;
-  private List<String> classifiers_lst = new ArrayList<String>(); 
+  private List<String> classifiers_lst = new ArrayList<String>();
+  private String vr_uri = null,vr_apikey=null,vr_version=null;
 
-  public ImageAnalysis(String apiKey) {
+  public ImageAnalysis(String apiKey,String vr_version,String vr_uri) {
     // API key is automatically retrieved from VCAP_SERVICES by the Watson SDK
-    vision = new VisualRecognition(ScavengerContants.vr_version);
+    vision = new VisualRecognition(vr_version);
+    this.vr_uri=vr_uri;
+    this.vr_apikey=apiKey;
+    this.vr_version=vr_version;
 
     // get the key from the VCAP_SERVICES as workaround for
     // https://github.com/watson-developer-cloud/java-sdk/issues/371
@@ -203,7 +207,7 @@ public class ImageAnalysis {
   
   private void loadClassifiers()
   {
-		String classifiers = new CommandsUtils().executeCommand("bash","-c","curl -X GET \""+ScavengerContants.vr_classifier_uri+"?version="+ScavengerContants.vr_version+"&api_key="+ScavengerContants.vr_APIKey+"\"");
+		String classifiers = new CommandsUtils().executeCommand("bash","-c","curl -X GET \""+vr_uri+"/v3/classifiers?version="+vr_version+"&api_key="+vr_apikey+"\"");
 		JsonArray classifier_arr = new JsonParser().parse(classifiers.toLowerCase()).getAsJsonObject().get("classifiers").getAsJsonArray();
 		for(int i=0;i<classifier_arr.size();i++){
 			if(classifier_arr.get(i).getAsJsonObject().get("status").getAsString().equals("ready")){

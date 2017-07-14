@@ -48,7 +48,7 @@ public class ImageTraining {
 			while(true){
 				try {
 					Thread.sleep(6000);
-					String res = new CommandsUtils().executeCommand("bash","-c","curl -X GET \""+ScavengerContants.vr_classifier_uri+"?api_key="+ScavengerContants.vr_APIKey+"&version="+ScavengerContants.vr_version+"\"");
+					String res = new CommandsUtils().executeCommand("bash","-c","curl -X GET \""+ScavengerContants.vr_classifier_uri+"/v3/classifiers?api_key="+ScavengerContants.vr_APIKey+"&version="+ScavengerContants.vr_version+"\"");
 					if(res.toLowerCase().contains("\"status\": \"training\"")){
 						ImageTrainingApp.getInstance().tts.playTextToSpeech("please wait classifier is being trained.");
 					}

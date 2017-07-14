@@ -20,7 +20,14 @@ package com.ibm.watson.scavenger.CloudantNoSQLDB;
 public class JSonDocumentTemplateClass {
 	private String img_base64 = null;
 	private String img_id = null;
-	  public String getImg_id() {
+	private String img_result_html = null;
+	  public String getImg_result_html() {
+		return img_result_html;
+	}
+	public void setImg_result_html(String img_result_html) {
+		this.img_result_html = img_result_html;
+	}
+	public String getImg_id() {
 		return img_id;
 	}
 	public void setImg_id(String img_id) {

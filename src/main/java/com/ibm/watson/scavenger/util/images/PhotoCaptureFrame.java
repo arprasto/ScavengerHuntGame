@@ -99,15 +99,12 @@ public class PhotoCaptureFrame extends JFrame {
 		return obj.f;
 	}
 	
-	public static void updateCaptureFrame(File capturedImgFile)
+	public static void updateCaptureFrame(File capturedImgFile,String img_result_html)
 	{
-		
-		String result = PredictionApp.getInstance().imgsvc.analyzeImageJSon(capturedImgFile);
-		//System.out.println(result);
-		
+				
 		Photo photo=null;
 		try {
-			photo = new Photo("IBM Watson predictions for below image",capturedImgFile.toURI().toURL(),result);
+			photo = new Photo("IBM Watson predictions for below image",capturedImgFile.toURI().toURL(),img_result_html);
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
 		}

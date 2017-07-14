@@ -4,7 +4,7 @@
 
   <groupId>com.ibm.watson</groupId>
   <artifactId>scavengerHunt</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
+  <version>0.0.1</version>
   <packaging>jar</packaging>
   
 

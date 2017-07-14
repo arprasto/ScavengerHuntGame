@@ -69,8 +69,8 @@ public class PredictionApp
     	 */
 		tts = new TTSMain(ScavengerContants.TTS_uname,ScavengerContants.TTS_pass);
 		stt = new SpeechToTextWebSocketMain(ScavengerContants.STT_uname,ScavengerContants.STT_pass);
-		imgsvc = new ImageAnalysis(ScavengerContants.vr_APIKey); 
-		dbsvc = new DBCommunicator(ScavengerContants.cloudant_uname,ScavengerContants.cloudant_pass,ScavengerContants.cloudant_url);
+		imgsvc = new ImageAnalysis(ScavengerContants.vr_APIKey,ScavengerContants.vr_version,ScavengerContants.vr_classifier_uri); 
+		dbsvc = new DBCommunicator(ScavengerContants.cloudant_uname,ScavengerContants.cloudant_pass,ScavengerContants.cloudant_url,ScavengerContants.cloudant_dbName);
 		iotObj = new IoTUtil();
     	
     }

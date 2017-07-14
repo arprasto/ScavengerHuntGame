@@ -32,9 +32,11 @@ public class PatchedCredentialUtils {
   private static final String WATSON_VISUAL_RECOGNITION = "watson_vision_combined";
   
   private static final String WATSON_CLOUDANT_DB = "cloudantNoSQLDB";
-  private static final String uname = "username";
-  private static final String pass = "password";
-  private static final String  url = "url";
+  private static final String db_uname_key = "username";
+  private static final String db_pass_key = "password";
+  private static final String db_url_key = "url";
+  
+  private static final String vr_url_key = "url";
 
   /** The Constant APIKEY. */
   private static final String APIKEY = "api_key";
@@ -58,8 +60,8 @@ public class PatchedCredentialUtils {
    * @return the VCAP_SERVICES as a {@link JsonObject}.
    */
   private static JsonObject getVCAPServices() {
-    final String envServices = services != null ? services : System.getenv("VCAP_SERVICES");
-	//final String envServices = "{     \"watson_vision_combined\": [         {             \"credentials\": {                 \"url\": \"https://gateway-a.watsonplatform.net/visual-recognition/api\",                 \"note\": \"It may take up to 5 minutes for this key to become active\",                 \"api_key\": \"17489bb6a6cc8205ab8cda4809835566b9ade391\"             },             \"syslog_drain_url\": null,             \"volume_mounts\": [],             \"label\": \"watson_vision_combined\",             \"provider\": null,             \"plan\": \"standard\",             \"name\": \"arpitVisual Recognition-qy\",             \"tags\": [                 \"watson\",                 \"ibm_created\",                 \"ibm_dedicated_public\"             ]         }     ],     \"cloudantNoSQLDB\": [         {             \"credentials\": {                 \"username\": \"d7c5040f-eb20-4867-9c73-6d8af9cd5bac-bluemix\",                 \"password\": \"fffa15e57a697a25c4a5b171f752d2dbe8a090fba974a8b35dbe9db3a1f366a9\",                 \"host\": \"d7c5040f-eb20-4867-9c73-6d8af9cd5bac-bluemix.cloudant.com\",                 \"port\": 443,                 \"url\": \"https://d7c5040f-eb20-4867-9c73-6d8af9cd5bac-bluemix:fffa15e57a697a25c4a5b171f752d2dbe8a090fba974a8b35dbe9db3a1f366a9@d7c5040f-eb20-4867-9c73-6d8af9cd5bac-bluemix.cloudant.com\"             },             \"syslog_drain_url\": null,             \"volume_mounts\": [],             \"label\": \"cloudantNoSQLDB\",             \"provider\": null,             \"plan\": \"Lite\",             \"name\": \"arpitCameraIOT-cloudantNoSQLDB\",             \"tags\": [                 \"data_management\",                 \"ibm_created\",                 \"lite\",                 \"ibm_dedicated_public\"             ]         }     ],     \"AvailabilityMonitoring\": [         {             \"credentials\": {                 \"cred_url\": \"https://perfbroker.ng.bluemix.net\",                 \"token\": \"11fYqMpL6n+f74eTL76zFjF0whS7KXOLkDN/rwZFz41rALhrkDjpJS7Y/nA1aOpW2DsGCAZnJGQrfKpj5GmJ+BfC80ga0inYtC7rCC37M4E=\"            },             \"syslog_drain_url\": null,             \"volume_mounts\": [],             \"label\": \"AvailabilityMonitoring\",             \"provider\": null,             \"plan\": \"Lite\",             \"name\": \"availability-monitoring-auto\",             \"tags\": [                 \"ibm_created\",                 \"bluemix_extensions\",                 \"dev_ops\",                 \"lite\"             ]         }     ] }";
+    //final String envServices = services != null ? services : System.getenv("VCAP_SERVICES");
+	final String envServices = "{     \"watson_vision_combined\": [         {             \"credentials\": {                 \"url\": \"https://gateway-a.watsonplatform.net/visual-recognition/api\",                 \"note\": \"It may take up to 5 minutes for this key to become active\",                 \"api_key\": \"17489bb6a6cc8205ab8cda4809835566b9ade391\"             },             \"syslog_drain_url\": null,             \"volume_mounts\": [],             \"label\": \"watson_vision_combined\",             \"provider\": null,             \"plan\": \"standard\",             \"name\": \"arpitVisual Recognition-qy\",             \"tags\": [                 \"watson\",                 \"ibm_created\",                 \"ibm_dedicated_public\"             ]         }     ],     \"cloudantNoSQLDB\": [         {             \"credentials\": {                 \"username\": \"d7c5040f-eb20-4867-9c73-6d8af9cd5bac-bluemix\",                 \"password\": \"fffa15e57a697a25c4a5b171f752d2dbe8a090fba974a8b35dbe9db3a1f366a9\",                 \"host\": \"d7c5040f-eb20-4867-9c73-6d8af9cd5bac-bluemix.cloudant.com\",                 \"port\": 443,                 \"url\": \"https://d7c5040f-eb20-4867-9c73-6d8af9cd5bac-bluemix:fffa15e57a697a25c4a5b171f752d2dbe8a090fba974a8b35dbe9db3a1f366a9@d7c5040f-eb20-4867-9c73-6d8af9cd5bac-bluemix.cloudant.com\"             },             \"syslog_drain_url\": null,             \"volume_mounts\": [],             \"label\": \"cloudantNoSQLDB\",             \"provider\": null,             \"plan\": \"Lite\",             \"name\": \"arpitCameraIOT-cloudantNoSQLDB\",             \"tags\": [                 \"data_management\",                 \"ibm_created\",                 \"lite\",                 \"ibm_dedicated_public\"             ]         }     ],     \"AvailabilityMonitoring\": [         {             \"credentials\": {                 \"cred_url\": \"https://perfbroker.ng.bluemix.net\",                 \"token\": \"11fYqMpL6n+f74eTL76zFjF0whS7KXOLkDN/rwZFz41rALhrkDjpJS7Y/nA1aOpW2DsGCAZnJGQrfKpj5GmJ+BfC80ga0inYtC7rCC37M4E=\"            },             \"syslog_drain_url\": null,             \"volume_mounts\": [],             \"label\": \"AvailabilityMonitoring\",             \"provider\": null,             \"plan\": \"Lite\",             \"name\": \"availability-monitoring-auto\",             \"tags\": [                 \"ibm_created\",                 \"bluemix_extensions\",                 \"dev_ops\",                 \"lite\"             ]         }     ] }";
     if (envServices == null)
       return null;
 
@@ -108,6 +110,28 @@ public class PatchedCredentialUtils {
     return null;
   }
 
+  public static String getVRurl(String plan) {
+	    final JsonObject services = getVCAPServices();
+	    if (services == null)
+	      return null;
+
+	    for (final Entry<String, JsonElement> entry : services.entrySet()) {
+	      final String key = entry.getKey();
+	      if (key.startsWith(WATSON_VISUAL_RECOGNITION)) {
+	        final JsonArray servInstances = services.getAsJsonArray(key);
+	        for (final JsonElement instance : servInstances) {
+	          final JsonObject service = instance.getAsJsonObject();
+	          final String instancePlan = service.get(PLAN).getAsString();
+	          if (plan == null || plan.equalsIgnoreCase(instancePlan)) {
+	            final JsonObject credentials = instance.getAsJsonObject().getAsJsonObject(CREDENTIALS);
+	              return credentials.get(vr_url_key).getAsString();
+	          }
+	        }
+	      }
+	    }
+	    return null;
+	  }
+
   public static String getDBuname(String plan) {
 
 	    final JsonObject services = getVCAPServices();
@@ -123,7 +147,7 @@ public class PatchedCredentialUtils {
 	          final String instancePlan = service.get(PLAN).getAsString();
 	          if (plan == null || plan.equalsIgnoreCase(instancePlan)) {
 	            final JsonObject credentials = instance.getAsJsonObject().getAsJsonObject(CREDENTIALS);
-	              return credentials.get(uname).getAsString();
+	              return credentials.get(db_uname_key).getAsString();
 	          }
 	        }
 	      }
@@ -146,7 +170,7 @@ public class PatchedCredentialUtils {
 	          final String instancePlan = service.get(PLAN).getAsString();
 	          if (plan == null || plan.equalsIgnoreCase(instancePlan)) {
 	            final JsonObject credentials = instance.getAsJsonObject().getAsJsonObject(CREDENTIALS);
-	              return credentials.get(pass).getAsString();
+	              return credentials.get(db_pass_key).getAsString();
 	          }
 	        }
 	      }
@@ -169,7 +193,7 @@ public class PatchedCredentialUtils {
 	          final String instancePlan = service.get(PLAN).getAsString();
 	          if (plan == null || plan.equalsIgnoreCase(instancePlan)) {
 	            final JsonObject credentials = instance.getAsJsonObject().getAsJsonObject(CREDENTIALS);
-	              return credentials.get(url).getAsString();
+	              return credentials.get(db_url_key).getAsString();
 	          }
 	        }
 	      }
