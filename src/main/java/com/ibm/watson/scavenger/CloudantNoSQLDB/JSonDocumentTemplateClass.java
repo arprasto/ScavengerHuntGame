@@ -21,6 +21,13 @@ public class JSonDocumentTemplateClass {
 	private String img_base64 = null;
 	private String img_id = null;
 	private String img_result_html = null;
+	private String _rev = null;
+	public String get_rev() {
+		return _rev;
+	}
+	public void set_rev(String _rev) {
+		this._rev = _rev;
+	}
 	  public String getImg_result_html() {
 		return img_result_html;
 	}
