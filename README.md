@@ -14,6 +14,9 @@ This scavenger app consists of below two applications:
 
 Scavenger Hunt game is standalone java based application built on top of Linux based platform which can be run independently on IoT based device such as RaspPi or MacBook or any linux based operating system.
 
+Architecture:
+<img src="src/extresources/images/Snip20170721_19.png" allign="center"/>
+
 After completing this journey you will understand how to:
 a. Authorize a person through creating a custom classifier in IBM Watson visual recognition.
 b. Recognize speech using Speech To Text service of Watson.
