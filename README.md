@@ -1,6 +1,6 @@
 Introduction:
 
-In this developer journey we will create Scavenger Hunt game based on Watson's below services:
+In this developer journey we will create Scavenger Hunt game and a Image training app based on Watson's below services:
 
 1. Speech To Text(STT)
 2. Text To Speech(TTS)
@@ -37,7 +37,7 @@ Pre Requisite:
 1. goto bluemix catalog home page and under "Apps" select "Boilerplates".
 2. click "Internet of Things Platform Starter".
 3. Enter app name and other required inputs and click "create" button.
-4. this will configure below three things for you to start with IoT stuff:
+4. This will configure below three things for you to start with IoT stuff:
 	* Node-Red JS sdk
 	* IoT Platform service
 	* Cloudant NoSQL DB service
@@ -47,6 +47,8 @@ Pre Requisite:
 	c. Visual Recognition
 	d. IoT (created in previus step)
 	e. Cloudant NoSQL(created in previus step)
+   			You can mannually add your precreated Watson services as shown below by clicking to "Connections" in left menu panel.
+<img src="src/extresources/images/Snip20170811_4.png" allign="center"/>
 
 Before you begin:
 
