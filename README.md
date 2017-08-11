@@ -47,6 +47,7 @@ Pre Requisite:
 	c. Visual Recognition
 	d. IoT (created in previus step)
 	e. Cloudant NoSQL(created in previus step)
+	
    			You can mannually add your precreated Watson services as shown below by clicking to "Connections" in left menu panel.
 <img src="src/extresources/images/Snip20170811_4.png" allign="center"/>
 
