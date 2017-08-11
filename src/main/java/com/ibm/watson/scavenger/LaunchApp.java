@@ -42,7 +42,8 @@ import javax.swing.JOptionPane;
 
 public class LaunchApp {
 
-	private static Properties loadedProperties = null;
+	private static Properties loadedProperties = new Properties();
+
 	public static void main(String[] args) 
 	{
 		if(args.length <= 1){
@@ -73,7 +74,6 @@ public class LaunchApp {
 	}
 	
 	private static void loadProperties(String propertiesFilePath){
-		loadedProperties = new Properties();
     	InputStream input = null;
     	try {
     		input = new FileInputStream(propertiesFilePath);

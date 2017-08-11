@@ -11,7 +11,7 @@
 	<classpathentry kind="var" path="M2_REPO/org/slf4j/slf4j-api/1.7.2/slf4j-api-1.7.2.jar"/>
 	<classpathentry kind="var" path="M2_REPO/com/ibm/watson/developer_cloud/java-sdk/3.8.0/java-sdk-3.8.0.jar"/>
 	<classpathentry kind="var" path="M2_REPO/com/ibm/watson/developer_cloud/alchemy/3.8.0/alchemy-3.8.0.jar"/>
-	<classpathentry kind="var" path="M2_REPO/com/ibm/watson/developer_cloud/core/3.8.0/core-3.8.0.jar"/>
+	<classpathentry kind="var" path="M2_REPO/com/ibm/watson/developer_cloud/core/3.8.0/core-3.8.0.jar" sourcepath="SOURCE_ATTACHER/core-3.8.0-sources.jar"/>
 	<classpathentry kind="var" path="M2_REPO/com/squareup/okhttp3/okhttp/3.7.0/okhttp-3.7.0.jar"/>
 	<classpathentry kind="var" path="M2_REPO/com/squareup/okio/okio/1.12.0/okio-1.12.0.jar"/>
 	<classpathentry kind="var" path="M2_REPO/com/squareup/okhttp3/logging-interceptor/3.7.0/logging-interceptor-3.7.0.jar"/>
@@ -34,7 +34,7 @@
 	<classpathentry kind="var" path="M2_REPO/com/ibm/watson/developer_cloud/tone-analyzer/3.8.0/tone-analyzer-3.8.0.jar"/>
 	<classpathentry kind="var" path="M2_REPO/com/ibm/watson/developer_cloud/tradeoff-analytics/3.8.0/tradeoff-analytics-3.8.0.jar"/>
 	<classpathentry kind="var" path="M2_REPO/com/ibm/watson/developer_cloud/visual-recognition/3.8.0/visual-recognition-3.8.0.jar"/>
-	<classpathentry kind="var" path="M2_REPO/com/ibm/messaging/watson-iot/0.2.4/watson-iot-0.2.4.jar"/>
+	<classpathentry kind="var" path="M2_REPO/com/ibm/messaging/watson-iot/0.2.4/watson-iot-0.2.4.jar" sourcepath="SOURCE_ATTACHER/watson-iot-0.2.4-sources-1502204778865.jar"/>
 	<classpathentry kind="var" path="M2_REPO/log4j/log4j/1.2.17/log4j-1.2.17.jar"/>
 	<classpathentry kind="var" path="M2_REPO/org/eclipse/paho/org.eclipse.paho.client.mqttv3/1.1.1/org.eclipse.paho.client.mqttv3-1.1.1.jar"/>
 	<classpathentry kind="var" path="M2_REPO/commons-net/commons-net/3.3/commons-net-3.3.jar"/>

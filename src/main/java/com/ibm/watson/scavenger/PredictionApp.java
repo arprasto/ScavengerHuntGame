@@ -31,7 +31,6 @@ import com.ibm.watson.scavenger.speechToText.SpeechToTextWebSocketMain;
 import com.ibm.watson.scavenger.textToSpeech.TTSMain;
 import com.ibm.watson.scavenger.util.ScavengerContants;
 import com.ibm.watson.scavenger.util.images.WatchDir;
-import com.ibm.watson.scavenger.visualrecognition.ImageAnalysis;
 
 public class PredictionApp 
 {
@@ -53,7 +52,6 @@ public class PredictionApp
     
     public TTSMain tts = null;
     public SpeechToTextWebSocketMain stt = null;
-    public ImageAnalysis imgsvc = null;
     public DBCommunicator dbsvc = null;
     public IoTUtil iotObj = null;
     
@@ -63,13 +61,11 @@ public class PredictionApp
     	 * 
     	 * a. IBM Watson Text to Speech
     	 * b. IBM Watson Speech to Text
-    	 * c. IBM Watson Visual Recognition
-    	 * d. IBM Watson Cloudant No SQL DB service
-    	 * e. IBM Watson IoT connect
+    	 * c. IBM Watson Cloudant No SQL DB service
+    	 * d. IBM Watson IoT connect
     	 */
 		tts = new TTSMain(ScavengerContants.TTS_uname,ScavengerContants.TTS_pass);
 		stt = new SpeechToTextWebSocketMain(ScavengerContants.STT_uname,ScavengerContants.STT_pass);
-		imgsvc = new ImageAnalysis(ScavengerContants.vr_APIKey,ScavengerContants.vr_version,ScavengerContants.vr_classifier_uri); 
 		dbsvc = new DBCommunicator(ScavengerContants.cloudant_uname,ScavengerContants.cloudant_pass,ScavengerContants.cloudant_url,ScavengerContants.cloudant_dbName);
 		iotObj = new IoTUtil();
     	
@@ -78,7 +74,7 @@ public class PredictionApp
     {
     	try{
     		loadServices();
-		tts.playTextToSpeech("welcome to IBM bluemix platform. To start the game you can say the keyword like. game. scavenger hunt game. hunt game. To end the game anytime you can say the keyword like. exit. i am done. or even please exit.");
+		//tts.playTextToSpeech("welcome to IBM bluemix platform. To start the game you can say the keyword like. game. scavenger hunt game. hunt game. To end the game anytime you can say the keyword like. exit. i am done. please exit.");
 		
 		Thread hearingThread = new Thread() {
 			
@@ -90,19 +86,20 @@ public class PredictionApp
 		//start the IBM Watson STT service thread		
 		hearingThread.start();
 		
+		final Path dir = Paths.get(ScavengerContants.tmp_image_dir.toURI());
+
 		Thread dirWatchThread = new Thread(){
 
 		@Override
 		public void run() {
 			try{
-			Path dir = Paths.get(ScavengerContants.tmp_image_dir.toURI());
 	        new WatchDir(dir, true).processEvents();
 			}catch(IOException e){
 				e.printStackTrace();
 			}
 		}
 		};
-		
+				
 		//start the Watch thread to look after IMG file creation/updation in tmp_image_dir_path directory path. 
 		dirWatchThread.start();
 		

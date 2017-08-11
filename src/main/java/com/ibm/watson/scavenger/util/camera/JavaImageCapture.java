@@ -161,7 +161,7 @@ public class JavaImageCapture extends JFrame implements Runnable, WebcamListener
 				} catch (IOException e1) {
 					e1.printStackTrace();
 				}
-				statusLabel.setText("image captured click again to capture/add another image");
+				statusLabel.setText("click again to capture/add another image");
 				if(img_capture_tmp_dir.getPath().equals(ScavengerContants.vr_train_img_dir.getPath()))
 				{
 					String count = new CommandsUtils().executeCommand("bash","-c","ls "+ScavengerContants.vr_train_img_dir_path+"/"+img_file_prefix+"*.jpg | wc -l");
@@ -173,7 +173,7 @@ public class JavaImageCapture extends JFrame implements Runnable, WebcamListener
 						cmdUtils.executeCommand("bash","-c","cd "+ScavengerContants.vr_train_img_dir_path+"; zip "+img_file_prefix+"_positive_examples.zip "+img_file_prefix+"*.jpg");
 						cmdUtils.executeCommand("bash","-c","rm "+ScavengerContants.vr_train_img_dir_path+"/"+img_file_prefix+"*.jpg");
 						new ImageTraining().createClassifier(img_file_prefix,ScavengerContants.vr_train_img_dir_path+"/"+img_file_prefix+"_positive_examples.zip",ScavengerContants.vr_negative_example_zip);
-						System.exit(0);
+						//System.exit(0);
 					}
 				}
 			}

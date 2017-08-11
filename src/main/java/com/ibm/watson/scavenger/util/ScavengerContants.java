@@ -45,7 +45,6 @@ public class ScavengerContants
 			vr_train_img_dir_path = tmp_image_dir_path+"/train",
 			vr_process_img_dir_path = tmp_image_dir_path+"/process",
 			vr_classifier_name = LaunchApp.getLoadedProperties().getProperty("vr_classifier_name").trim(),
-			vr_classifier_uri = LaunchApp.getLoadedProperties().getProperty("vr_classifier_uri").trim(),
 			vr_version = LaunchApp.getLoadedProperties().getProperty("vr_version",VisualRecognition.VERSION_DATE_2016_05_20).trim(),
 			vr_negative_example_zip = LaunchApp.getLoadedProperties().getProperty("vr_negative_example_zip","./src/extresources/images/australianterrier.zip").trim(),
 			

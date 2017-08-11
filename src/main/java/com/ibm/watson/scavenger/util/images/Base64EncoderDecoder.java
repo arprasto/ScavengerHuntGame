@@ -34,6 +34,7 @@ public class Base64EncoderDecoder {
             byte[] bytes = new byte[(int)file.length()];
             fileInputStreamReader.read(bytes);
             encodedfile = Base64.getEncoder().encodeToString(bytes);
+            fileInputStreamReader.close();
         } catch (FileNotFoundException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -41,7 +42,7 @@ public class Base64EncoderDecoder {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-
+        //System.out.println(encodedfile);
         return encodedfile;
     }
 	

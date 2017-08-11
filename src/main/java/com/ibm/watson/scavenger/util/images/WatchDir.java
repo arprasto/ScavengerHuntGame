@@ -25,11 +25,11 @@ import static java.nio.file.StandardWatchEventKinds.OVERFLOW;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URI;
 import java.nio.file.FileSystems;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.WatchEvent;
 import java.nio.file.WatchKey;
@@ -37,6 +37,8 @@ import java.nio.file.WatchService;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
 
 import com.google.gson.JsonObject;
 import com.ibm.watson.scavenger.PredictionApp;
@@ -52,6 +54,7 @@ public class WatchDir {
     private final Map<WatchKey,Path> keys;
     private final boolean recursive;
     private boolean trace = false;
+    public static BlockingQueue<URI> queue = new LinkedBlockingQueue<URI>();
  
     @SuppressWarnings("unchecked")
     static <T> WatchEvent<T> cast(WatchEvent<?> event) {
@@ -118,6 +121,7 @@ public class WatchDir {
      * Process all events for keys queued to the watcher
      */
     public void processEvents() {
+    	
         for (;;) {
  
             // wait for key to be signalled
@@ -148,23 +152,25 @@ public class WatchDir {
                 Path child = dir.resolve(name);
  
                 // print out event
-                System.out.format("%s: %s\n", event.kind().name(), child);
+                //System.out.format("%s: %s\n", event.kind().name(), child);
                 
                 if((child.toString().endsWith(".jpg") || child.toString().endsWith(".jpeg") || child.toString().endsWith(".png")) &&
                 		child.toString().contains(ScavengerContants.vr_process_img_dir_path))
                 {
-                	//PhotoCaptureFrame.updateCaptureFrame(new File(child.toUri()));
-
-                	//File f=new File(child.toUri());
-                	//PredictionApp.getInstance().dbsvc.saveIMGBase64(new JSonDocumentTemplateClass(f.getName(),new Base64EncoderDecoder().encodeFileToBase64Binary(f)));
-                	
-            		JsonObject event_payload = new JsonObject();
+            		/*JsonObject event_payload = new JsonObject();
             		event_payload.addProperty("img_base64",new Base64EncoderDecoder().encodeFileToBase64Binary(new File(child.toUri())));
-            		event_payload.addProperty("img_id", new File(child.toUri()).getName());
-            		event_payload.addProperty("_id",new File(child.toUri()).getName());
-            		
-            		event_payload.addProperty("img_result_html",PredictionApp.getInstance().imgsvc.analyzeImageJSon(new File(child.toUri())));
-                	PredictionApp.getInstance().iotObj.publishEvent(event_payload);
+            		event_payload.addProperty("img_id", new File(child.toUri()).getName());*/
+            		//event_payload.addProperty("_id",new File(child.toUri()).getName());
+            		//event_payload.addProperty("img_result_html",PredictionApp.getInstance().imgsvc.analyzeImageJSon(new File(child.toUri())));
+            		try {
+            			//put img for process in queue
+            			System.out.println("putting in queue:"+child.toString());
+						this.queue.put(child.toUri());
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+                	
                 }
                 
                 if((child.toString().endsWith(".jpg") || child.toString().endsWith(".jpeg") || child.toString().endsWith(".png")) &&
@@ -197,9 +203,10 @@ public class WatchDir {
                 }
             }
         }
+        
     }
  
-    static void usage() {
+	static void usage() {
         System.err.println("usage: java WatchDir [-r] dir");
         System.exit(-1);
     }

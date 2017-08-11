@@ -25,6 +25,7 @@ import javax.swing.SwingUtilities;
 import com.ibm.watson.scavenger.textToSpeech.TTSMain;
 import com.ibm.watson.scavenger.util.ScavengerContants;
 import com.ibm.watson.scavenger.util.camera.JavaImageCapture;
+import com.ibm.watson.scavenger.visualrecognition.VRMain;
 
 public class ImageTrainingApp {
 
@@ -41,6 +42,7 @@ public class ImageTrainingApp {
 	}
 	
     public TTSMain tts = null;
+    public VRMain vr_svc = null;
 
 	public void startTrainingApp()
 	{
@@ -49,14 +51,23 @@ public class ImageTrainingApp {
 		 * a. Text To Speech
 		 */
 		tts = new TTSMain(ScavengerContants.TTS_uname,ScavengerContants.TTS_pass);
+		vr_svc = new VRMain(ScavengerContants.vr_version,ScavengerContants.vr_APIKey);
 		
 		/*announce the welcome message*/
-       	tts.playTextToSpeech("to train the model you need to give at least twenty or more images. the more clear images"
-        			+ "you give. will increase the prediction accuracy of image. ");
-       	
+		//tts.playTextToSpeech("to train the model you need to give at least twenty or more images. the more clear images"
+        	//	+ "you give. will increase the prediction accuracy of image. ");
        	/*get the custom classifier name which we are going to create*/
-        	String class_name = JOptionPane.showInputDialog(new JFrame("class name"),"Enter the class name you are going to create","enter Class name");
-        	
+       	String class_name = null;
+       	int chances = 1;
+       	do { 
+       		class_name = JOptionPane.showInputDialog(new JFrame("class name"),"Enter the class name(should consists of at least 5 chars.)");
+       		System.out.println(class_name);
+       		if(chances++ > 1)
+       		{
+       			tts.playTextToSpeech("you have tried maximum number of attempts to enter valid classifier name. system will exit now. Please try again later.");
+       			System.exit(0);
+       		}
+       	}while(class_name == null || class_name.trim().equals("") || class_name.equals(null) || class_name.length()<5);
         	JavaImageCapture startCap = new JavaImageCapture(ScavengerContants.vr_train_img_dir,class_name,ImageTrainingApp.getInstance());
         	try {
                 /* start the camera capture window thread to capture the image*/

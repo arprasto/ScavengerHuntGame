@@ -30,8 +30,7 @@ Dependency:
 Note: this app has been tested on MacBook with below versions:
 1. java version "1.8.0_121"
 2. Apache Maven 3.2.5
-3. curl 7.52.1
-4. Zip 3.0
+3. Zip 3.0
 
 Pre Requisite:
 
@@ -87,14 +86,14 @@ You can run any of below application:
 a. Running the Training app
 
 	1. run the below java command on your shell prompt:
-	java -cp scavengerHunt-0.0.1-SNAPSHOT-jar-with-dependencies.jar:scavengerHunt-0.0.1-SNAPSHOT.jar com.ibm.watson.scavenger.LaunchApp sample-properties.properties train
+	java -cp ${work_dir}/target/scavenger_common.jar com.ibm.watson.scavenger.LaunchApp sample-properties.properties train
 	2. Please listen the announce message from STT service and create custom image classifier using launched java web cam.  
 	3. After creating the classifier this app will automatically exit.
 
 b. Running the Scavenger app
 
 	1. run the below java command on your shell prompt:
-	java -cp scavengerHunt-0.0.1-SNAPSHOT-jar-with-dependencies.jar:scavengerHunt-0.0.1-SNAPSHOT.jar com.ibm.watson.scavenger.LaunchApp sample-properties.properties scavenger
+	java -cp ${work_dir}/target/scavenger_common.jar com.ibm.watson.scavenger.LaunchApp sample-properties.properties scavenger
 	2. To start the game your voice will be recognized through Watson STT service to recognize any of key work like:'game' or 'scavenger hunt game' or 'hunt game'.
 	2. This will connect your device to Watson IoT and captured images will be stored in configured CLOUDANT DB.
 	3. To exit from this app your voice will be recognized through Watson STT service to recognize any of key work like: 'exit' or 'i am done' or 'i'm done'.

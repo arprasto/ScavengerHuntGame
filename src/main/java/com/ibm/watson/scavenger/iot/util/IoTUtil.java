@@ -19,6 +19,8 @@
 
 package com.ibm.watson.scavenger.iot.util;
 
+import java.io.File;
+import java.net.URI;
 import java.util.List;
 import java.util.Properties;
 import java.util.concurrent.BlockingQueue;
@@ -37,6 +39,7 @@ import com.ibm.watson.scavenger.CloudantNoSQLDB.JSonDocumentTemplateClass;
 import com.ibm.watson.scavenger.util.ScavengerContants;
 import com.ibm.watson.scavenger.util.images.Base64EncoderDecoder;
 import com.ibm.watson.scavenger.util.images.PhotoCaptureFrame;
+import com.ibm.watson.scavenger.util.images.WatchDir;
 
 public class IoTUtil {
 	Properties options = new Properties();
@@ -103,6 +106,7 @@ class MyNewCommandCallback implements CommandCallback, Runnable {
 	}
 
 	public void run() {
+		boolean publish_flag = true;
 				List<JSonDocumentTemplateClass> lst = PredictionApp.getInstance().dbsvc.getAllIMGsBase64();
 				if(!(lst.size() <= 0)){
 					for(JSonDocumentTemplateClass obj:lst){
@@ -127,6 +131,25 @@ class MyNewCommandCallback implements CommandCallback, Runnable {
                 	PhotoCaptureFrame.updateCaptureFrame(new Base64EncoderDecoder().decodeFileToIMG(db_rec.getImg_base64()),db_rec.getImg_result_html());
 					PhotoCaptureFrame.getJFrame().setVisible(true);
 					PhotoCaptureFrame.getJFrame().repaint();
+					publish_flag = true;
+				}
+				
+				if(cmd.getCommand().equals("checkForPublishIoT")){
+					if(WatchDir.queue.size() > 0 && publish_flag)
+					{
+					try {
+						publish_flag = false;
+						URI uri = WatchDir.queue.take();
+						System.out.println("posting to IoT:"+uri.toString());
+						JsonObject event_payload = new JsonObject();
+	            		event_payload.addProperty("img_base64",new Base64EncoderDecoder().encodeFileToBase64Binary(new File(uri)));
+	            		event_payload.addProperty("img_id", new File(uri).getName());
+						PredictionApp.getInstance().iotObj.publishEvent(event_payload);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					}
 				}
 			} catch (InterruptedException e) {}
 		}
