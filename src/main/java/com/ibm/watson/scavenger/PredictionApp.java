@@ -74,7 +74,7 @@ public class PredictionApp
     {
     	try{
     		loadServices();
-		//tts.playTextToSpeech("welcome to IBM bluemix platform. To start the game you can say the keyword like. game. scavenger hunt game. hunt game. To end the game anytime you can say the keyword like. exit. i am done. please exit.");
+		tts.playTextToSpeech("welcome to IBM bluemix platform. To start the game you can say the keyword like. game. scavenger hunt game. hunt game. To end the game anytime you can say the keyword like. exit. i am done. please exit.");
 		
 		Thread hearingThread = new Thread() {
 			
