@@ -40,6 +40,7 @@ import com.ibm.watson.developer_cloud.speech_to_text.v1.websocket.RecognizeCallb
 import com.ibm.watson.scavenger.PredictionApp;
 import com.ibm.watson.scavenger.util.ScavengerContants;
 import com.ibm.watson.scavenger.util.camera.JavaImageCapture;
+import com.ibm.watson.scavenger.util.images.PhotoCaptureFrame;
 
 public class SpeechToTextWebSocketMain {
 	private static Logger LOGGER = Logger.getLogger(SpeechToTextWebSocketMain.class.getName());
@@ -50,6 +51,17 @@ public class SpeechToTextWebSocketMain {
 		sttsvc = new SpeechToText(uname,upass);
 		//callback = sttsvc.registerCallback("http://www.google.com","arpit").execute();
 	}
+	
+	/*public static void main(String[] arg){
+		final SpeechToTextWebSocketMain stt_svc = new SpeechToTextWebSocketMain("uname","pass");
+Thread hearingThread = new Thread() {
+			
+			public void run() {
+				stt_svc.startSTT();
+			}
+		};
+		hearingThread.start();
+	}*/
 	
 	public void startSTT()
 	{
@@ -124,6 +136,7 @@ public class SpeechToTextWebSocketMain {
                 if(text.toLowerCase().contains("game") || text.toLowerCase().contains("hunt game") || text.toLowerCase().contains("scavenger"))
                 {
                 	JavaImageCapture startCap = new JavaImageCapture(ScavengerContants.vr_process_img_dir,"tmp",PredictionApp.getInstance());
+					PhotoCaptureFrame.getJFrame().setVisible(true);
 						SwingUtilities.invokeLater(startCap);
                 }
                 if(text.toLowerCase().contains("i am done") || text.toLowerCase().contains("exit") || text.toLowerCase().contains("i'm done") || 
