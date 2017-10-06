@@ -19,6 +19,9 @@
 
 package com.ibm.watson.scavenger.speechToText;
 
+import java.util.HashSet;
+import java.util.Random;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -135,9 +138,13 @@ Thread hearingThread = new Thread() {
                 LOGGER.log(Level.INFO,text);
                 if(text.toLowerCase().contains("game") || text.toLowerCase().contains("hunt game") || text.toLowerCase().contains("scavenger"))
                 {
-                	JavaImageCapture startCap = new JavaImageCapture(ScavengerContants.vr_process_img_dir,"tmp",PredictionApp.getInstance());
-					PhotoCaptureFrame.getJFrame().setVisible(true);
-						SwingUtilities.invokeLater(startCap);
+                	/*
+                	 * get random objects for which imgs has to be captured for
+                	 */
+                	String random_img_obj_str=getRandomImgObjString(ScavengerContants.allowable_obj_set,ScavengerContants.possible_number_of_obj);
+                	JavaImageCapture startCap = new JavaImageCapture(ScavengerContants.vr_process_img_dir,"tmp",PredictionApp.getInstance(),ScavengerContants.time_frame,random_img_obj_str);
+					PhotoCaptureFrame.getPhotoesJFrame().setVisible(true);
+					SwingUtilities.invokeLater(startCap);
                 }
                 if(text.toLowerCase().contains("i am done") || text.toLowerCase().contains("exit") || text.toLowerCase().contains("i'm done") || 
                 		text.toLowerCase().contains("close"))
@@ -157,6 +164,29 @@ Thread hearingThread = new Thread() {
 		public void onListening() {
 			LOGGER.log(Level.INFO, "now listening");
 		}
+
+		private String getRandomImgObjString(String[] allowable_obj_set, int possible_number_of_obj) {
+			String obj_str = "";
+			int nxt,i=0;
+			Set<Integer> random_num=new HashSet<Integer>();
+			if(possible_number_of_obj>allowable_obj_set.length){
+				possible_number_of_obj = allowable_obj_set.length;
+			}
+			
+			do{
+				nxt = new Random().nextInt(allowable_obj_set.length);
+				if(!random_num.contains(new Integer(nxt)))
+				{
+				obj_str = allowable_obj_set[nxt]+". "+obj_str;
+				random_num.add(nxt);
+				i++;
+				}
+				
+			}while(i<possible_number_of_obj);
+
+			return obj_str;
+		}
+
     }
-    
+        
 }

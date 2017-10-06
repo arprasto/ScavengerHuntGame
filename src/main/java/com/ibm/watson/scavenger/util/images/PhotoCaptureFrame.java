@@ -19,6 +19,8 @@
 package com.ibm.watson.scavenger.util.images;
 
 import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.Font;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -30,16 +32,20 @@ import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.SwingConstants;
 
-import com.ibm.watson.scavenger.PredictionApp;
+import org.apache.commons.io.FilenameUtils;
+
 import com.ibm.watson.scavenger.util.CommandsUtils;
 import com.ibm.watson.scavenger.util.ScavengerContants;
 
 public class PhotoCaptureFrame extends JFrame {
-	JPanel jp = null;
+	JPanel jp = null,headerPanel=null;
 	JFrame f = null;
+	JLabel ImageRemainingProcessingLabel=null,ImagebeingProcessedLabel=null;
 	Logger log = Logger.getLogger(PhotoCaptureFrame.class.getName());
 	private static PhotoCaptureFrame obj = null;
 	PhotoCaptureFrame(){
@@ -48,7 +54,7 @@ public class PhotoCaptureFrame extends JFrame {
         
         JScrollPane scrollPane = new JScrollPane(jp);
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-        scrollPane.setPreferredSize(new Dimension(dim.width/2-40,dim.height-100));
+        scrollPane.setPreferredSize(new Dimension(dim.width/2-40,dim.height-117));
         
     	JButton btn = new JButton("Upload Image");
     	
@@ -63,7 +69,9 @@ public class PhotoCaptureFrame extends JFrame {
 		            if (res == JFileChooser.APPROVE_OPTION) {
 		                File file = fc.getSelectedFile();
 		                //SharedResources.sharedCache.getCapturedImageList().add(file);
-		                new CommandsUtils().executeCommand("bash","-c","cp "+file.getPath()+" "+ScavengerContants.vr_process_img_dir_path);
+		                File tmpf_name = File.createTempFile("tmp", "."+FilenameUtils.getExtension(file.getName()));
+		                System.out.println("cp "+file.getPath()+" "+ScavengerContants.vr_process_img_dir_path+File.separator+tmpf_name.getName());
+		                new CommandsUtils().executeCommand("bash","-c","cp "+file.getPath()+" "+ScavengerContants.vr_process_img_dir_path+File.separator+tmpf_name.getName());
 		            }
 		        }catch (Exception iOException) {
 		        }
@@ -71,8 +79,23 @@ public class PhotoCaptureFrame extends JFrame {
 			}
 		});
         
+    	ImageRemainingProcessingLabel = new JLabel("REMAINIG IMAGES:0");
+    	ImageRemainingProcessingLabel.setHorizontalAlignment(SwingConstants.LEFT);
+    	ImageRemainingProcessingLabel.setFont(new Font("Arial",Font.BOLD,18));
+    	
+    	ImagebeingProcessedLabel = new JLabel("PROCESSING IMAGES:0");
+    	ImagebeingProcessedLabel.setHorizontalAlignment(SwingConstants.LEFT);
+    	ImagebeingProcessedLabel.setFont(new Font("Arial",Font.BOLD,18));
+
+    	headerPanel = new JPanel(new FlowLayout());
+    	headerPanel.add(ImageRemainingProcessingLabel);
+    	headerPanel.add(btn);
+    	headerPanel.add(ImagebeingProcessedLabel);
+    	headerPanel.setSize(new Dimension(getWidth(),10));
+    	
+    	
         JPanel contentPane = new JPanel();
-        contentPane.add(btn);
+        contentPane.add(headerPanel);
         contentPane.add(scrollPane);
         f = new JFrame("IBM Watson Visual Prediction Window");
         f.setContentPane(contentPane);
@@ -83,7 +106,23 @@ public class PhotoCaptureFrame extends JFrame {
         f.setVisible(true);
 	}
 	
-	public static JPanel getJPanel()
+	public static JLabel getImageRemainingProcessingLabel()
+	{
+		if(obj == null){
+			obj = new PhotoCaptureFrame();
+		}
+		return obj.ImageRemainingProcessingLabel;
+	}
+	
+	public static JLabel getImagebeingProcessedLabel()
+	{
+		if(obj == null){
+			obj = new PhotoCaptureFrame();
+		}
+		return obj.ImagebeingProcessedLabel;
+	}
+
+	public static JPanel getPhotoesJPanel()
 	{
 		if(obj == null){
 			obj = new PhotoCaptureFrame();
@@ -91,7 +130,7 @@ public class PhotoCaptureFrame extends JFrame {
 		return obj.jp;
 	}
 
-	public static JFrame getJFrame()
+	public static JFrame getPhotoesJFrame()
 	{
 		if(obj == null){
 			obj = new PhotoCaptureFrame();
@@ -108,8 +147,8 @@ public class PhotoCaptureFrame extends JFrame {
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
 		}
-		PhotoCaptureFrame.getJPanel().add(photo);
-		PhotoCaptureFrame.getJFrame().repaint();
-		PhotoCaptureFrame.getJFrame().setVisible(true);
+		PhotoCaptureFrame.getPhotoesJPanel().add(photo);
+		PhotoCaptureFrame.getPhotoesJFrame().repaint();
+		PhotoCaptureFrame.getPhotoesJFrame().setVisible(true);
 	}
 }

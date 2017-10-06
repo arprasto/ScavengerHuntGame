@@ -64,7 +64,12 @@ public class ScavengerContants
 			iot_device_id=LaunchApp.getLoadedProperties().getProperty("iot_device_id").trim(),
 			iot_Authentication_Token=LaunchApp.getLoadedProperties().getProperty("iot_Authentication_Token").trim(),
 			iot_Authentication_Method=LaunchApp.getLoadedProperties().getProperty("iot_Authentication_Method").trim(),
-			iot_event_for_img_base64=LaunchApp.getLoadedProperties().getProperty("iot_event_for_img_base64").trim()
+			iot_event_for_img_base64=LaunchApp.getLoadedProperties().getProperty("iot_event_for_img_base64").trim(),
+			
+			/*
+			 * allowable set of objects to capture images of
+			 */
+			allowable_obj_set[] = LaunchApp.getLoadedProperties().getProperty("allowable_obj_set").trim().split(",")
 			;
 	
 			/*
@@ -76,7 +81,16 @@ public class ScavengerContants
 			VGA (640 x 480)
 			 */
 			public static int camera_width = Integer.valueOf(LaunchApp.getLoadedProperties().getProperty("camera_width","320").trim()),
-			camera_height = Integer.valueOf(LaunchApp.getLoadedProperties().getProperty("camera_height","240").trim());
+			camera_height = Integer.valueOf(LaunchApp.getLoadedProperties().getProperty("camera_height","240").trim()),
+			
+			/*
+			 * actual number of allowable objects which will be selected randomly from allowable_obj_set for a particular app session
+			 * value(possible_number_of_obj) <= size(allowable_obj_set)
+			 */
+			possible_number_of_obj = Integer.valueOf(LaunchApp.getLoadedProperties().getProperty("possible_number_of_obj","3").trim())
+			;
+			
+			public static long time_frame=Long.valueOf(LaunchApp.getLoadedProperties().getProperty("time_frame","10000").trim());
 	
 	
 	public static File tmp_image_dir = null,vr_train_img_dir=null,vr_process_img_dir=null;

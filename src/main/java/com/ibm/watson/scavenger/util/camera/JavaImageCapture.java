@@ -18,6 +18,7 @@ package com.ibm.watson.scavenger.util.camera;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.MouseEvent;
@@ -28,8 +29,8 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.lang.Thread.UncaughtExceptionHandler;
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.imageio.ImageIO;
@@ -63,20 +64,33 @@ public class JavaImageCapture extends JFrame implements Runnable, WebcamListener
 	private Webcam webcam = null;
 	private WebcamPanel panel = null;
 	private WebcamPicker picker = null;
-	JLabel statusLabel = null;
-	JPanel statusPanel = null;
+	private JLabel statusLabel = null;
+	private JPanel statusPanel = null;
+	private JLabel timeRemainingLabel = null;
+	private JPanel timeRemainingPanel = null;
 	private File img_capture_tmp_dir = null;
-	private String img_file_prefix = null;
+	private String img_file_prefix = null,random_img_obj_str=null;
 	private Object invoking_ref = null;
+	private long camera_visible_time_frame = 0;
+	private JFrame main_window = null;
 
 	public ArrayList<File> capturedImages = new ArrayList<File>();
 	public EventListenerList images_lst = new EventListenerList();
 	
-	public JavaImageCapture(File img_capture_tmp_dir, String img_file_prefix,Object ref)
+	public JavaImageCapture(File img_capture_tmp_dir, String img_file_prefix,Object ref,long camera_visible_time_frame,String random_img_obj_str)
 	{
 		this.img_capture_tmp_dir = img_capture_tmp_dir;
 		this.img_file_prefix = img_file_prefix;
 		this.invoking_ref = ref;
+		this.camera_visible_time_frame = camera_visible_time_frame;
+		this.random_img_obj_str = random_img_obj_str;
+	}
+	
+	public JavaImageCapture(File img_capture_tmp_dir, String img_file_prefix,Object ref) {
+		this.img_capture_tmp_dir = img_capture_tmp_dir;
+		this.img_file_prefix = img_file_prefix;
+		this.invoking_ref = ref;
+		
 	}
 	
 	public void run() {
@@ -86,8 +100,6 @@ public class JavaImageCapture extends JFrame implements Runnable, WebcamListener
 		setTitle("Scavenger Image Capture");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setLayout(new BorderLayout());
-		
-		
 
 		addWindowListener(this);
 
@@ -120,10 +132,23 @@ public class JavaImageCapture extends JFrame implements Runnable, WebcamListener
 		add(statusPanel, BorderLayout.SOUTH);
 		statusPanel.setPreferredSize(new Dimension(getWidth(), 16));
 		statusPanel.setLayout(new BoxLayout(statusPanel, BoxLayout.X_AXIS));
-		statusLabel = new JLabel("click anywhere on above camera capture window to capture image");
+		statusLabel = new JLabel("click anywhere above to capture image");
 		statusLabel.setHorizontalAlignment(SwingConstants.LEFT);
 		statusPanel.add(statusLabel);
 		statusPanel.setVisible(true);
+		
+		if(invoking_ref instanceof PredictionApp){
+		timeRemainingPanel = new JPanel();
+		timeRemainingPanel.setBorder(new BevelBorder(BevelBorder.LOWERED));
+		add(timeRemainingPanel, BorderLayout.SOUTH);
+		timeRemainingPanel.setPreferredSize(new Dimension(getWidth(), 60));
+		timeRemainingPanel.setLayout(new BoxLayout(timeRemainingPanel, BoxLayout.X_AXIS));
+		timeRemainingLabel = new JLabel("TIME REMAINIG");
+		timeRemainingLabel.setHorizontalAlignment(SwingConstants.LEFT);
+		timeRemainingLabel.setFont(new Font("Arial",Font.BOLD,20));
+		timeRemainingPanel.add(timeRemainingLabel);
+		timeRemainingPanel.setVisible(true);
+		}
 		
 		add(picker, BorderLayout.NORTH);
 		add(panel, BorderLayout.CENTER);
@@ -161,7 +186,7 @@ public class JavaImageCapture extends JFrame implements Runnable, WebcamListener
 				} catch (IOException e1) {
 					e1.printStackTrace();
 				}
-				statusLabel.setText("click again to capture/add another image");
+				statusLabel.setText("click again to capture/add another img");
 				if(img_capture_tmp_dir.getPath().equals(ScavengerContants.vr_train_img_dir.getPath()))
 				{
 					String count = new CommandsUtils().executeCommand("bash","-c","ls "+ScavengerContants.vr_train_img_dir_path+"/"+img_file_prefix+"*.jpg | wc -l");
@@ -181,8 +206,8 @@ public class JavaImageCapture extends JFrame implements Runnable, WebcamListener
 
 		pack();
 		setVisible(true);
-
-		Thread t = new Thread() {
+		setResizable(false);
+		final Thread t = new Thread() {
 
 			 
 			public void run() {
@@ -197,7 +222,9 @@ public class JavaImageCapture extends JFrame implements Runnable, WebcamListener
 		Thread announcThread = new Thread() {			 
 			public void run() {
 				if(invoking_ref instanceof PredictionApp) {
-					PredictionApp.getInstance().tts.playTextToSpeech("you can click anywhere on the camera capture window to capture the image. Watson image recognition result will be displayed in saperate window.");
+					PredictionApp.getInstance().tts.playTextToSpeech("you can click anywhere on the camera capture window to capture the image. "
+							+ " you have "+camera_visible_time_frame/1000+". seconds to capture the images. "
+									+ " you need to capture images that should contain objects like "+random_img_obj_str);
 				}
 				if(invoking_ref instanceof ImageTrainingApp){
 					ImageTrainingApp.getInstance().tts.playTextToSpeech("you can click anywhere on the Camera window to capture the image. once image count reaches to twenty or more, image classifier will be automatically created.");
@@ -205,7 +232,8 @@ public class JavaImageCapture extends JFrame implements Runnable, WebcamListener
 			}
 		};
 		announcThread.start();
-		
+		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+		main_window = this;
 	}
 	
 	public List<File> getCapturedImages()
@@ -213,17 +241,37 @@ public class JavaImageCapture extends JFrame implements Runnable, WebcamListener
 		return capturedImages;
 	}
 
-	public static void main(String[] args) throws InvocationTargetException, InterruptedException {
-		/*JavaImageCapture startCap = new JavaImageCapture();
-		SwingUtilities.invokeAndWait(startCap);*/
-	}
+	/*public static void main(String[] args) throws InvocationTargetException, InterruptedException {
+		JavaImageCapture startCap = new JavaImageCapture(new File("/tmp/Watson"),"tmp",new PredictionApp(),10000,"a,b,c,d");
+		SwingUtilities.invokeAndWait(startCap);
+	}*/
 
 	
 	 
 	public void webcamOpen(WebcamEvent we) {
 		System.out.println("webcam open");
 		if(invoking_ref instanceof PredictionApp) {
-		//PhotoCaptureFrame.getJFrame().setVisible(true);
+			
+			/*
+			 * thread responsible to close the webcam window after camera_visible_time_frame millis.
+			 */
+			Thread counterThread = new Thread(){
+				public void run(){
+					long startTime = new Date().getTime();
+					while(true){
+						long curent_time = new Date().getTime();
+						timeRemainingLabel.setText("TIME REMAINIG : "+(camera_visible_time_frame -(curent_time-startTime))+" millis");
+						if((curent_time-startTime) >= camera_visible_time_frame ) {
+							System.out.println("Image capture timeout "+(curent_time-startTime));
+							webcam.close();
+							webcam.shutdown();
+							main_window.dispose();
+							break;
+						}
+					}
+				}
+			};
+			counterThread.start();
 		}
 	}
 
@@ -241,7 +289,7 @@ public class JavaImageCapture extends JFrame implements Runnable, WebcamListener
 
 	 
 	public void webcamImageObtained(WebcamEvent we) {
-		// do nothing
+		//System.out.println("webcam webcamImageObtained");
 	}
 
 	 

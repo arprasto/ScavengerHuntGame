@@ -166,6 +166,7 @@ public class WatchDir {
             			//put img for process in queue
             			System.out.println("putting in queue:"+child.toString());
 						this.queue.put(child.toUri());
+						PhotoCaptureFrame.getImageRemainingProcessingLabel().setText("REMAINIG IMAGES:"+WatchDir.queue.size());
 					} catch (InterruptedException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();

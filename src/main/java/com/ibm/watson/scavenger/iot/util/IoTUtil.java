@@ -113,8 +113,8 @@ class MyNewCommandCallback implements CommandCallback, Runnable {
 						
                 	PhotoCaptureFrame.updateCaptureFrame(new Base64EncoderDecoder().decodeFileToIMG(obj.getImg_base64()),obj.getImg_result_html());
 
-					PhotoCaptureFrame.getJFrame().setVisible(true);
-					PhotoCaptureFrame.getJFrame().repaint();
+					PhotoCaptureFrame.getPhotoesJFrame().setVisible(true);
+					PhotoCaptureFrame.getPhotoesJFrame().repaint();
 					}
 				}
 
@@ -129,9 +129,11 @@ class MyNewCommandCallback implements CommandCallback, Runnable {
 				{
 					JSonDocumentTemplateClass db_rec = PredictionApp.getInstance().dbsvc.getIMGBase64(cmd.getData().toString().trim());
                 	PhotoCaptureFrame.updateCaptureFrame(new Base64EncoderDecoder().decodeFileToIMG(db_rec.getImg_base64()),db_rec.getImg_result_html());
-					PhotoCaptureFrame.getJFrame().setVisible(true);
-					PhotoCaptureFrame.getJFrame().repaint();
+					PhotoCaptureFrame.getPhotoesJFrame().setVisible(true);
+					PhotoCaptureFrame.getPhotoesJFrame().repaint();
 					publish_flag = true;
+					PhotoCaptureFrame.getImagebeingProcessedLabel().setText("PROCESSING IMAGES:0");
+					PhotoCaptureFrame.getImageRemainingProcessingLabel().setText("REMAINIG IMAGES:"+WatchDir.queue.size());
 				}
 				
 				if(cmd.getCommand().equals("checkForPublishIoT")){
@@ -141,6 +143,8 @@ class MyNewCommandCallback implements CommandCallback, Runnable {
 						publish_flag = false;
 						URI uri = WatchDir.queue.take();
 						System.out.println("posting to IoT:"+uri.toString());
+						PhotoCaptureFrame.getImagebeingProcessedLabel().setText("PROCESSING IMAGES:1");
+						PhotoCaptureFrame.getImageRemainingProcessingLabel().setText("REMAINIG IMAGES:"+WatchDir.queue.size());
 						JsonObject event_payload = new JsonObject();
 	            		event_payload.addProperty("img_base64",new Base64EncoderDecoder().encodeFileToBase64Binary(new File(uri)));
 	            		event_payload.addProperty("img_id", new File(uri).getName());
