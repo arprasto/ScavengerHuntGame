@@ -87,7 +87,17 @@ public class ScavengerContants
 			 * actual number of allowable objects which will be selected randomly from allowable_obj_set for a particular app session
 			 * value(possible_number_of_obj) <= size(allowable_obj_set)
 			 */
-			possible_number_of_obj = Integer.valueOf(LaunchApp.getLoadedProperties().getProperty("possible_number_of_obj","3").trim())
+			possible_number_of_obj = Integer.valueOf(LaunchApp.getLoadedProperties().getProperty("possible_number_of_obj","3").trim()),
+			
+			/*
+			 * number of classifiers to be created in single run of training app
+			 */
+			classifier_count = Integer.valueOf(LaunchApp.getLoadedProperties().getProperty("possible_number_of_obj","1").trim()),
+			
+			/*
+			 * number of positive images needed to create each custom classifier
+			 */
+			number_of_positive_imgs = Integer.valueOf(LaunchApp.getLoadedProperties().getProperty("number_of_positive_imgs","21").trim())
 			;
 			
 			public static long time_frame=Long.valueOf(LaunchApp.getLoadedProperties().getProperty("time_frame","10000").trim());

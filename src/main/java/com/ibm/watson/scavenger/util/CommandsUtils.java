@@ -55,9 +55,9 @@ public class CommandsUtils {
     	InputStream is = process.getInputStream();
     	InputStreamReader isr = new InputStreamReader(is);
     	BufferedReader br = new BufferedReader(isr);
-    	String line;
+    	String line="";
 
-    	LOG.log(Level.INFO, "retreiving result for "+command.toString()+" : ");
+    	LOG.log(Level.INFO, "retreiving result for \""+command[2].toString()+"\" : ");
 
     	while ((line = br.readLine()) != null) {
     	  output.append(line);
@@ -67,8 +67,5 @@ public class CommandsUtils {
 		}
     	LOG.log(Level.INFO, "Output of running "+output.toString());
 		return output.toString();
-
-
 	}
-
 }

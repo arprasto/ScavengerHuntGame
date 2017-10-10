@@ -54,6 +54,8 @@ import com.ibm.watson.scavenger.ImageTrainingApp;
 import com.ibm.watson.scavenger.PredictionApp;
 import com.ibm.watson.scavenger.util.CommandsUtils;
 import com.ibm.watson.scavenger.util.ScavengerContants;
+import com.ibm.watson.scavenger.util.ScavengerException;
+import com.ibm.watson.scavenger.util.ThreadMessage_hook;
 import com.ibm.watson.scavenger.visualrecognition.ImageTraining;
 
 
@@ -64,12 +66,12 @@ public class JavaImageCapture extends JFrame implements Runnable, WebcamListener
 	private Webcam webcam = null;
 	private WebcamPanel panel = null;
 	private WebcamPicker picker = null;
-	private JLabel statusLabel = null;
-	private JPanel statusPanel = null;
+	private JLabel imgCountLabel = null;
+	private JPanel imgCountPanel = null;
 	private JLabel timeRemainingLabel = null;
 	private JPanel timeRemainingPanel = null;
 	private File img_capture_tmp_dir = null;
-	private String img_file_prefix = null,random_img_obj_str=null;
+	private String img_file_prefix = null,random_img_obj_str=null,negative_zip=null;
 	private Object invoking_ref = null;
 	private long camera_visible_time_frame = 0;
 	private JFrame main_window = null;
@@ -86,11 +88,11 @@ public class JavaImageCapture extends JFrame implements Runnable, WebcamListener
 		this.random_img_obj_str = random_img_obj_str;
 	}
 	
-	public JavaImageCapture(File img_capture_tmp_dir, String img_file_prefix,Object ref) {
+	public JavaImageCapture(File img_capture_tmp_dir, String img_file_prefix,Object ref,String negative_zip) {
 		this.img_capture_tmp_dir = img_capture_tmp_dir;
 		this.img_file_prefix = img_file_prefix;
 		this.invoking_ref = ref;
-		
+		this.negative_zip=negative_zip;
 	}
 	
 	public void run() {
@@ -127,15 +129,18 @@ public class JavaImageCapture extends JFrame implements Runnable, WebcamListener
 		panel.setToolTipText("click anywhere on this window to capture image");
 		panel.setImageSizeDisplayed(true);
 
-		statusPanel = new JPanel();
-		statusPanel.setBorder(new BevelBorder(BevelBorder.LOWERED));
-		add(statusPanel, BorderLayout.SOUTH);
-		statusPanel.setPreferredSize(new Dimension(getWidth(), 16));
-		statusPanel.setLayout(new BoxLayout(statusPanel, BoxLayout.X_AXIS));
-		statusLabel = new JLabel("click anywhere above to capture image");
-		statusLabel.setHorizontalAlignment(SwingConstants.LEFT);
-		statusPanel.add(statusLabel);
-		statusPanel.setVisible(true);
+		if(invoking_ref instanceof ImageTrainingApp){
+		imgCountPanel = new JPanel();
+		imgCountPanel.setBorder(new BevelBorder(BevelBorder.LOWERED));
+		add(imgCountPanel, BorderLayout.SOUTH);
+		imgCountPanel.setPreferredSize(new Dimension(getWidth(), 60));
+		imgCountPanel.setLayout(new BoxLayout(imgCountPanel, BoxLayout.X_AXIS));
+		imgCountLabel = new JLabel("IMAGE COUNT REMAINIG:"+ScavengerContants.number_of_positive_imgs);
+		imgCountLabel.setHorizontalAlignment(SwingConstants.LEFT);
+		imgCountLabel.setFont(new Font("Arial",Font.BOLD,20));
+		imgCountPanel.add(imgCountLabel);
+		imgCountPanel.setVisible(true);
+		}
 		
 		if(invoking_ref instanceof PredictionApp){
 		timeRemainingPanel = new JPanel();
@@ -176,7 +181,9 @@ public class JavaImageCapture extends JFrame implements Runnable, WebcamListener
 			}
 			
 			public void mouseClicked(MouseEvent e) {
-				statusLabel.setText("capturing image please wait");
+				if(invoking_ref instanceof ImageTrainingApp) imgCountLabel.setText("capturing image please wait");
+				if(invoking_ref instanceof PredictionApp) timeRemainingLabel.setText("capturing image please wait");
+				
 				BufferedImage image = webcam.getImage();
 				try {
 					File capturedImage = File.createTempFile(img_file_prefix,".jpg",img_capture_tmp_dir);
@@ -186,18 +193,29 @@ public class JavaImageCapture extends JFrame implements Runnable, WebcamListener
 				} catch (IOException e1) {
 					e1.printStackTrace();
 				}
-				statusLabel.setText("click again to capture/add another img");
 				if(img_capture_tmp_dir.getPath().equals(ScavengerContants.vr_train_img_dir.getPath()))
 				{
-					String count = new CommandsUtils().executeCommand("bash","-c","ls "+ScavengerContants.vr_train_img_dir_path+"/"+img_file_prefix+"*.jpg | wc -l");
+					String count = new CommandsUtils().executeCommand("bash","-c","ls "+ScavengerContants.vr_train_img_dir_path+"/"+img_file_prefix+"*.jpg | wc -l").trim();
 					System.out.println(count);
+					imgCountLabel.setText("IMAGE COUNT REMAINIG:"+(ScavengerContants.number_of_positive_imgs-Integer.valueOf(count)));
 					if(!count.equals("") && count != null)
-					if(Integer.valueOf(count.trim()) > 20)
+					if(Integer.valueOf(count.trim()) >= ScavengerContants.number_of_positive_imgs)
 					{
 						CommandsUtils cmdUtils = new CommandsUtils();
 						cmdUtils.executeCommand("bash","-c","cd "+ScavengerContants.vr_train_img_dir_path+"; zip "+img_file_prefix+"_positive_examples.zip "+img_file_prefix+"*.jpg");
 						cmdUtils.executeCommand("bash","-c","rm "+ScavengerContants.vr_train_img_dir_path+"/"+img_file_prefix+"*.jpg");
-						new ImageTraining().createClassifier(img_file_prefix,ScavengerContants.vr_train_img_dir_path+"/"+img_file_prefix+"_positive_examples.zip",ScavengerContants.vr_negative_example_zip);
+						try {
+							new ImageTraining().createClassifier(img_file_prefix,ScavengerContants.vr_train_img_dir_path+"/"+img_file_prefix+"_positive_examples.zip",negative_zip);
+						} catch (ScavengerException e1) {
+							e1.printStackTrace();
+							webcam.close();
+							webcam.shutdown();
+							synchronized(ThreadMessage_hook.classifier_shutDown_hook_obj){
+							ThreadMessage_hook.classifier_shutDown_hook_obj.setMsg("classifier created");;
+							ThreadMessage_hook.classifier_shutDown_hook_obj.notify();
+						}
+							main_window.dispose();
+						}
 						//System.exit(0);
 					}
 				}
@@ -240,12 +258,6 @@ public class JavaImageCapture extends JFrame implements Runnable, WebcamListener
 	{
 		return capturedImages;
 	}
-
-	/*public static void main(String[] args) throws InvocationTargetException, InterruptedException {
-		JavaImageCapture startCap = new JavaImageCapture(new File("/tmp/Watson"),"tmp",new PredictionApp(),10000,"a,b,c,d");
-		SwingUtilities.invokeAndWait(startCap);
-	}*/
-
 	
 	 
 	public void webcamOpen(WebcamEvent we) {
