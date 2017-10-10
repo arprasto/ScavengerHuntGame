@@ -68,16 +68,21 @@ public class ImageTrainingApp {
 		int i=1;
 		while(i<=ScavengerContants.classifier_count){
        	/*get the custom classifier name which we are going to create*/
-       	String class_name = null, negative_zip = ScavengerContants.vr_negative_example_zip;
+       	String class_name = null,negative_zip=null;
+		final String default_negative_zip = ScavengerContants.vr_negative_example_zip;
        	int chances = 1;
        	do { 
+       		
+       		/*
+       		 * swing UI starts here
+       		 */
     		JTextField classifier_name = new JTextField();
     		final JLabel zip_varification_label = new JLabel();
-    	      final JTextField negative_zip_path = new JTextField("default is australianterrier.zip");
+    	      final JTextField negative_zip_path = new JTextField("default is "+default_negative_zip);
     	      negative_zip_path.addFocusListener(new FocusListener() {
     			
     			public void focusLost(FocusEvent e) {
-    				if(!negative_zip_path.getText().equals("default is australianterrier.zip") && 
+    				if(!negative_zip_path.getText().equals("default is "+default_negative_zip) && 
     						!negative_zip_path.getText().trim().equals("") &&
     						!negative_zip_path.getText().equals("null") &&
     						negative_zip_path.getText() != null &&
@@ -86,7 +91,7 @@ public class ImageTrainingApp {
     				{
     					if(new CommandsUtils().executeCommand("bash","-c","ls "+negative_zip_path.getText().trim()).trim().equals("")){
     						zip_varification_label.setText("*invalid path/zip default considered");
-    						negative_zip_path.setText("default is australianterrier.zip");
+    						negative_zip_path.setText("default is "+default_negative_zip);
     					}
     					else {
         					negative_zip_path.setText(negative_zip_path.getText());
@@ -94,12 +99,12 @@ public class ImageTrainingApp {
     					}
     				}
     				else{
-    					negative_zip_path.setText("default is australianterrier.zip");
+    					negative_zip_path.setText("default is "+default_negative_zip);
     				}
     			}
     			
     			public void focusGained(FocusEvent e) {
-    				if(negative_zip_path.getText().equals("default is australianterrier.zip")){
+    				if(negative_zip_path.getText().equals("default is "+default_negative_zip)){
     					negative_zip_path.setText("");
     				}
     			}
@@ -118,13 +123,17 @@ public class ImageTrainingApp {
     	               "Please Enter Below Values", JOptionPane.OK_CANCEL_OPTION);
     	      if (result == JOptionPane.OK_OPTION) {
     	       		class_name = classifier_name.getText().trim();
-    	       		if (negative_zip_path.getText().equals("default is australianterrier.zip"))
-    	       			negative_zip = ScavengerContants.vr_negative_example_zip;
+    	       		if (negative_zip_path.getText().equals("default is "+default_negative_zip))
+    	       			negative_zip = default_negative_zip;
     	       		else
     	       			negative_zip = negative_zip_path.getText().trim();
        	         System.out.println("classifier_name value: " + class_name);
        	         System.out.println("negative_zip_path value: " + negative_zip);
     	      }	
+    	      
+    	      /*
+    	       * swing UI ends here
+    	       */
 
        		if(chances++ > 1)
        		{
