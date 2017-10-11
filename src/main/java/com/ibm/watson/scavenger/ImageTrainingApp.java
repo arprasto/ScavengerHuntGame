@@ -62,8 +62,8 @@ public class ImageTrainingApp {
 		vr_svc = new VRMain(ScavengerContants.vr_version,ScavengerContants.vr_APIKey);
 		
 		/*announce the welcome message*/
-		//tts.playTextToSpeech("to train the model you need to give at least twenty or more images for each classifier. the more clear images"
-        	//	+ "you give. will increase the prediction accuracy of image. ");
+		tts.playTextToSpeech("to train the model you need to give at least twenty or more images for each classifier. the more clear images"
+        		+ "you give. will increase the prediction accuracy of image. ");
 		
 		int i=1;
 		while(i<=ScavengerContants.classifier_count){
