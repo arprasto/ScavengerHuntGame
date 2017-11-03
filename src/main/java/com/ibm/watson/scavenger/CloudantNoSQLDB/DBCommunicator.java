@@ -53,7 +53,7 @@ public class DBCommunicator {
 	}
 	
 	public List<JSonDocumentTemplateClass> getAllIMGsBase64(String app_id){
-		return db.findByIndex("{  \"selector\": {    \"_id\": {      \"$gt\": 0    },\"app_id\": {      \"$eq\": "+app_id+"    }  },  \"fields\": [    \"_id\",    \"img_base64\"  ],  \"sort\": [    {      \"_id\": \"asc\"    }  ]}",JSonDocumentTemplateClass.class);
+		return db.findByIndex("{  \"selector\": {    \"_id\": {      \"$gt\": 0    },\"app_id\": {      \"$eq\": "+app_id+"    }  },  \"fields\": [    \"_id\",    \"img_base64\" ,\"random_img_obj_str\" ],  \"sort\": [    {      \"_id\": \"asc\"    }  ]}",JSonDocumentTemplateClass.class);
 	}
 
 	public List<JSonDocumentTemplateClass> getAllScores(String app_id){
