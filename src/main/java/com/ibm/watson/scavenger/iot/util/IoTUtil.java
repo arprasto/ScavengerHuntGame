@@ -107,15 +107,17 @@ class MyNewCommandCallback implements CommandCallback, Runnable {
 
 	public void run() {
 		boolean publish_flag = true;
-				List<JSonDocumentTemplateClass> lst = PredictionApp.getInstance().dbsvc.getAllIMGsBase64();
+		int score = 0;
+		
+				List<JSonDocumentTemplateClass> lst = PredictionApp.getInstance().dbsvc.getAllIMGsBase64(""+ScavengerContants.unique_app_id);
 				if(!(lst.size() <= 0)){
 					for(JSonDocumentTemplateClass obj:lst){
-						
                 	PhotoCaptureFrame.updateCaptureFrame(new Base64EncoderDecoder().decodeFileToIMG(obj.getImg_base64()),obj.getImg_result_html());
-
 					PhotoCaptureFrame.getPhotoesJFrame().setVisible(true);
 					PhotoCaptureFrame.getPhotoesJFrame().repaint();
+					score = score + obj.getScore();
 					}
+					PhotoCaptureFrame.getScoreLabel().setText("SCORE:"+score);
 				}
 
 		while(true) {
@@ -134,6 +136,8 @@ class MyNewCommandCallback implements CommandCallback, Runnable {
 					publish_flag = true;
 					PhotoCaptureFrame.getImagebeingProcessedLabel().setText("PROCESSING IMAGES:0");
 					PhotoCaptureFrame.getImageRemainingProcessingLabel().setText("REMAINIG IMAGES:"+WatchDir.queue.size());
+					score = score+db_rec.getScore();
+					PhotoCaptureFrame.getScoreLabel().setText("SCORE:"+score);
 				}
 				
 				if(cmd.getCommand().equals("checkForPublishIoT")){
@@ -148,6 +152,8 @@ class MyNewCommandCallback implements CommandCallback, Runnable {
 						JsonObject event_payload = new JsonObject();
 	            		event_payload.addProperty("img_base64",new Base64EncoderDecoder().encodeFileToBase64Binary(new File(uri)));
 	            		event_payload.addProperty("img_id", new File(uri).getName());
+	            		event_payload.addProperty("random_img_obj_str",ScavengerContants.random_img_obj_str);
+	            		event_payload.addProperty("app_id",ScavengerContants.unique_app_id);
 						PredictionApp.getInstance().iotObj.publishEvent(event_payload);
 					} catch (InterruptedException e) {
 						// TODO Auto-generated catch block

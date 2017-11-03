@@ -22,6 +22,10 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.Random;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -54,6 +58,8 @@ public class PredictionApp
     public SpeechToTextWebSocketMain stt = null;
     public DBCommunicator dbsvc = null;
     public IoTUtil iotObj = null;
+    public int unique_app_id = 0;
+    public String random_img_obj_str = null;
     
     public void loadServices() throws MalformedURLException
     {
@@ -68,8 +74,9 @@ public class PredictionApp
 		stt = new SpeechToTextWebSocketMain(ScavengerContants.STT_uname,ScavengerContants.STT_pass);
 		dbsvc = new DBCommunicator(ScavengerContants.cloudant_uname,ScavengerContants.cloudant_pass,ScavengerContants.cloudant_url,ScavengerContants.cloudant_dbName);
 		iotObj = new IoTUtil();
-    	
     }
+    
+
     void startGame()
     {
     	try{

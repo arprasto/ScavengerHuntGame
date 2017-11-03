@@ -12,7 +12,7 @@
  *****************************************************************************
  */
 /*
- * Main Text to Speech util class to connect it to Bluemix TTS service and playing audio using IoT device.
+ * Main Text to Speech util class to connect it to IBM Cloud TTS service and playing audio using IoT device.
  */
 
 package com.ibm.watson.scavenger.textToSpeech;

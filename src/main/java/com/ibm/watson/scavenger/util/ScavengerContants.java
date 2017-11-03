@@ -19,6 +19,10 @@ package com.ibm.watson.scavenger.util;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.Random;
+import java.util.Set;
 
 import com.ibm.watson.developer_cloud.visual_recognition.v3.VisualRecognition;
 import com.ibm.watson.scavenger.LaunchApp;
@@ -69,7 +73,12 @@ public class ScavengerContants
 			/*
 			 * allowable set of objects to capture images of
 			 */
-			allowable_obj_set[] = LaunchApp.getLoadedProperties().getProperty("allowable_obj_set").trim().split(",")
+			allowable_obj_set[] = LaunchApp.getLoadedProperties().getProperty("allowable_obj_set").trim().split(","),
+
+			/*
+	    	 * get random objects for which imgs has to be captured for
+	    	 */
+	    	random_img_obj_str=getRandomImgObjString(allowable_obj_set,ScavengerContants.possible_number_of_obj);
 			;
 	
 			/*
@@ -100,6 +109,8 @@ public class ScavengerContants
 			number_of_positive_imgs = Integer.valueOf(LaunchApp.getLoadedProperties().getProperty("number_of_positive_imgs","21").trim())
 			;
 			
+	    	public static int unique_app_id = (int) ((new Date().getTime() / 1000L) % Integer.MAX_VALUE);
+
 			public static long time_frame=Long.valueOf(LaunchApp.getLoadedProperties().getProperty("time_frame","10000").trim());
 	
 	
@@ -122,6 +133,30 @@ public class ScavengerContants
 					vr_process_img_dir.setWritable(true);
 				}
 	}
+	
+	private static String getRandomImgObjString(String[] allowable_obj_set, int possible_number_of_obj) {
+		String obj_str = "";
+		int nxt,i=0;
+		Set<Integer> random_num=new HashSet<Integer>();
+		if(possible_number_of_obj>allowable_obj_set.length){
+			possible_number_of_obj = allowable_obj_set.length;
+		}
+		
+		for(int j=0;;j++){
+			nxt = new Random().nextInt(allowable_obj_set.length);
+			if(!random_num.contains(new Integer(nxt)))
+			{
+			obj_str = allowable_obj_set[nxt]+". "+obj_str;
+			random_num.add(nxt);
+			if(random_num.size()==3) break;
+			}
+			
+		}
+
+		System.out.println("allowable set of objs is : "+obj_str);
+		return obj_str;
+	}
+
 	
 	/*public static void main(String[] arg)
 	{

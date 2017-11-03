@@ -52,7 +52,11 @@ public class DBCommunicator {
 		return db.find(JSonDocumentTemplateClass.class,id);
 	}
 	
-	public List<JSonDocumentTemplateClass> getAllIMGsBase64(){
-		return db.findByIndex("{  \"selector\": {    \"_id\": {      \"$gt\": 0    }  },  \"fields\": [    \"_id\",    \"img_base64\"  ],  \"sort\": [    {      \"_id\": \"asc\"    }  ]}",JSonDocumentTemplateClass.class);
+	public List<JSonDocumentTemplateClass> getAllIMGsBase64(String app_id){
+		return db.findByIndex("{  \"selector\": {    \"_id\": {      \"$gt\": 0    },\"app_id\": {      \"$eq\": "+app_id+"    }  },  \"fields\": [    \"_id\",    \"img_base64\"  ],  \"sort\": [    {      \"_id\": \"asc\"    }  ]}",JSonDocumentTemplateClass.class);
+	}
+
+	public List<JSonDocumentTemplateClass> getAllScores(String app_id){
+		return db.findByIndex("{  \"selector\": {    \"_id\": {      \"$gt\": 0    },\"app_id\": {      \"$eq\": "+app_id+"    }, \"score\": {      \"$gt\": 0    }  },  \"fields\": [\"_id\",\"score\",\"random_img_obj_str\"],  \"sort\": [    {      \"_id\": \"asc\"    }  ]}",JSonDocumentTemplateClass.class);
 	}
 }
