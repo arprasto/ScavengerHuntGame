@@ -19,11 +19,11 @@ Architecture:
 <img src="src/extresources/images/Snip20170721_19.png" allign="center"/>
 
 After completing this journey you will understand how to:
-a. Authorize a person through creating a custom classifier in IBM Watson visual recognition.
+a. Train VR classifier to detect an object in an image.
 b. Recognize speech using Speech To Text service of Watson.
 c. User friendly interaction by playing WAV stream received by calling Text to Speech.
 d. Store Images on cloud using IBM bluemix Cloudant DB service. 
-
+e. Leverage the IBM Cloud IoT platform. 
 
 Dependency:
 
@@ -72,16 +72,22 @@ b. create Node-Red device simulator to receive events/send notification back to 
 	1. goto the home page of boilerplate app created in Pre Requisite steps.
 	2. click "overview" menu option in left page panel.
 	3. on curren page you will see "Visit App URL" hyper link. This will load your Node-Red editor in saperate page.
-	4. On this Node Red editor page cllick menu on top right corner and select 'Import' -> 'Clipboard'.
-	5. In pop up input dialog copy and paste from NodeRedJsIoTReciever.json file attached with this code base.
-	6. Click on 'Deploy' button. 
+	
+	Note: execute below steps if you dont have base-64 node plugin else continue from step-6 
+	<img src="src/extresources/images/Snip20171106_14.png" allign="left"/>
+	4. On this Node Red editor page click menu -> Manage Palette -> Install. 
+	5. Type "base64" in search text box and install "node-red-node-base64" node plugin.
+	
+	6. Again on Node Red editor page click menu on top right corner and select 'Import' -> 'Clipboard'.
+	7. In pop up input dialog copy and paste from NodeRedJsIoTReciever.json file attached with this code base.
+	8. Click on 'Deploy' button. 
 
 How to build and run it:
 
 1. Create an properties file similar to sample-properties.properties provided.
 2. Update Watson bluemix credentials in for each service in above created property file.
 3. Clone this application code into your local env using 'git clone https://github.com/arprasto/ScavengerHuntGame'
-3. Run the maven build through 'mvn clean install'. This will create 2 jars(one with dependencies and one with app code binaries)
+3. Run the maven build through 'mvn clean install'. This will create 3 jars(one with dependencies, one with app code binaries and one containing both(scavenger_common.jar))
 4. Main class to start any of above mentioned app is com.ibm.watson.scavenger.LaunchApp. 
 
 You can run any of below application:
@@ -97,6 +103,6 @@ b. Running the Scavenger app
 
 	1. run the below java command on your shell prompt:
 	java -cp ${work_dir}/target/scavenger_common.jar com.ibm.watson.scavenger.LaunchApp sample-properties.properties scavenger
-	2. To start the game your voice will be recognized through Watson STT service to recognize any of key work like:'game' or 'scavenger hunt game' or 'hunt game'.
+	2. To start the game your voice will be recognized through Watson STT service to recognize any of key word like:'game' or 'scavenger hunt game' or 'hunt game'.
 	2. This will connect your device to Watson IoT and captured images will be stored in configured CLOUDANT DB.
-	3. To exit from this app your voice will be recognized through Watson STT service to recognize any of key work like: 'exit' or 'i am done' or 'i'm done'.
+	3. To exit from this app your voice will be recognized through Watson STT service to recognize any of key word: 'exit' or 'i am done' or 'i'm done'.
