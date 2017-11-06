@@ -75,6 +75,7 @@ b. create Node-Red device simulator to receive events/send notification back to 
 	
 	Note: execute below steps if you dont have base-64 node plugin else continue from step-6 
 <img src="./src/extresources/images/Snip20171106_14.png" allign="left"/>
+	
 	4. On this Node Red editor page click menu -> Manage Palette -> Install. 
 	5. Type "base64" in search text box and install "node-red-node-base64" node plugin.
 	
