@@ -73,7 +73,7 @@ b. create Node-Red device simulator to receive events/send notification back to 
 	2. click "overview" menu option in left page panel.
 	3. on curren page you will see "Visit App URL" hyper link. This will load your Node-Red editor in saperate page.
 	
-	Note: execute below steps if you dont have base-64 node plugin else continue from step-6 
+	Note: execute below steps 4 and 5, iff you dont have base-64 node plugin else continue from step-6 
 <img src="./src/extresources/images/Snip20171106_14.png" allign="left"/>
 	
 	4. On this Node Red editor page click menu -> Manage Palette -> Install. 
