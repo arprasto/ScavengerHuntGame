@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>com.ibm.watson</groupId>
-  <artifactId>scavengerHunt</artifactId>
+  <artifactId>WatsonVRTrainingApp</artifactId>
   <version>0.0.1</version>
   <packaging>jar</packaging>
   
@@ -81,7 +81,7 @@
 	          </descriptorRefs>
 	      <archive>
             <manifest>
-              <mainClass>com.ibm.watson.scavenger.LaunchApp</mainClass>
+              <mainClass>com.ibm.watson.WatsonVRTraining.LaunchApp</mainClass>
             </manifest>
           </archive>
 	        </configuration>
@@ -102,10 +102,10 @@
            <configuration>
            <target name="-post-jar">
 			    <echo>${basedir}${file.separator}target${file.separator}*.jar</echo> 
-			    <jar destfile="${basedir}${file.separator}target${file.separator}scavenger_common.jar">
+			    <jar destfile="${basedir}${file.separator}target${file.separator}WatsonVRTrainingApp_common.jar">
 			        <zipgroupfileset dir="${basedir}${file.separator}target${file.separator}" includes="*.jar"/>
 			        <manifest>
-			            <attribute name="Main-Class" value="com.ibm.watson.scavenger.LaunchApp"/>
+			            <attribute name="Main-Class" value="com.ibm.watson.WatsonVRTraining.LaunchApp"/>
 			        </manifest>
 			    </jar>
 			</target>
@@ -114,7 +114,7 @@
                        <zip destfile=${project.basedir}/target/combined-with-dependencies.jar>
     						<zipgroupfileset dir="target/" includes="*.jar"/>
     						<manifest>
-							    <attribute name="Main-Class" value="com.ibm.watson.scavenger.LaunchApp" />
+							    <attribute name="Main-Class" value="com.ibm.watson.WatsonVRTraining.LaunchApp" />
 							  </manifest>
 						</zip>
                    </ant>
