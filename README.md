@@ -87,7 +87,7 @@ How to build and run it:
 
 1. Create an properties file similar to sample-properties.properties provided.
 2. Update Watson bluemix credentials in for each service in above created property file.
-3. Clone this application code into your local env using 'git clone https://github.com/arprasto/ScavengerHuntGame'
+3. Clone this application code into your local env using 'git clone https://github.com/arprasto/WatsonVRTrainingApp'
 3. Run the maven build through 'mvn clean install'. This will create 3 jars(one with dependencies, one with app code binaries and one containing both(WatsonVRTrainingApp_common.jar))
 4. Main class to start any of above mentioned app is com.ibm.watson.WatsonVRTraining.LaunchApp. 
 
