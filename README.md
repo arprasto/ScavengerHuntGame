@@ -8,9 +8,7 @@ In this code pattern we will help to create a Watson Visual Recognition Image tr
 4. Watson IoT
 5. Cloudant NoSQL storage service
 
- <iframe width="420" height="315"
-src="https://www.youtube.com/embed/tgbNymZ7vqY">
-</iframe> 
+For quick intro see <a href="src/extresources/images/zoom_0.mp4">this vedio</a>
 
 This code pattern consists of below two applications:
 1. Training App(to create and train a new custom classifier using Watson's VR)
