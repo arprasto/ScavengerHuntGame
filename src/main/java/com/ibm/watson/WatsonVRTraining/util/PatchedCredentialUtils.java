@@ -61,7 +61,99 @@ public class PatchedCredentialUtils {
    */
   private static JsonObject getVCAPServices() {
     final String envServices = services != null ? services : System.getenv("VCAP_SERVICES");
-	    if (envServices == null)
+	  /*final String envServices =  "{"+
+    "\"cloudantNoSQLDB\": ["+
+        "{"+
+        "    \"credentials\": {"+
+         "       \"username\": \"bb9c1d61-4661-4dc7-9eb6-0040286f5ecc-bluemix\","+
+          "      \"password\": \"9ba8825fca1fdda7a6acc54440093377f93a851fbf82e5ead796d63de3a0738e\","+
+           "     \"host\": \"bb9c1d61-4661-4dc7-9eb6-0040286f5ecc-bluemix.cloudant.com\","+
+            "    \"port\": 443,"+
+             "   \"url\": \"https://bb9c1d61-4661-4dc7-9eb6-0040286f5ecc-bluemix:9ba8825fca1fdda7a6acc54440093377f93a851fbf82e5ead796d63de3a0738e@bb9c1d61-4661-4dc7-9eb6-0040286f5ecc-bluemix.cloudant.com\""+
+            "},"+
+            "\"syslog_drain_url\": null,"+
+            "\"volume_mounts\": [],"+
+            "\"label\": \"cloudantNoSQLDB\","+
+            "\"provider\": null,"+
+            "\"plan\": \"Lite\","+
+            "\"name\": \"scavengerApp-cloudantNoSQLDB\","+
+            "\"tags\": ["+
+             "   \"data_management\","+
+              "  \"ibm_created\","+
+               " \"lite\","+
+                "\"ibm_dedicated_public\""+
+            "]"+
+        "}"+
+    "],"+
+    "\"watson_vision_combined\": ["+
+     "   {"+
+      "      \"credentials\": {"+
+       "         \"url\": \"https://gateway-a.watsonplatform.net/visual-recognition/api\","+
+        "        \"note\": \"This is your previous free key. If you want a different one, please wait 24 hours after unbinding the key and try again.\","+
+         "       \"api_key\": \"c2fba7e90073e6b135b640f17c0845a2377c1e48\""+
+          "  },"+
+           " \"syslog_drain_url\": null,"+
+            "\"volume_mounts\": [],"+
+            "\"label\": \"watson_vision_combined\","+
+            "\"provider\": null,"+
+      "      \"plan\": \"free\","+
+       "     \"name\": \"arpitVisual Recognition-ed\","+
+        "    \"tags\": ["+
+         "       \"watson\","+
+          "      \"ibm_created\","+
+           "     \"ibm_dedicated_public\""+
+            "]"+
+"        }"+
+ "   ],"+
+  "  \"iotf-service\": ["+
+   "     {"+
+    "        \"credentials\": {"+
+     "           \"iotCredentialsIdentifier\": \"a2g6k39sl6r5\","+
+      "          \"mqtt_host\": \"2o7rzo.messaging.internetofthings.ibmcloud.com\","+
+       "         \"mqtt_u_port\": 1883,"+
+        "        \"mqtt_s_port\": 8883,"+
+         "       \"http_host\": \"2o7rzo.internetofthings.ibmcloud.com\","+
+          "      \"org\": \"2o7rzo\","+
+           "     \"apiKey\": \"a-2o7rzo-1fbadqaisq\","+
+            "    \"apiToken\": \"?UnmluU2?)g1o7L-@)\""+
+            "},"+
+"            \"syslog_drain_url\": null,"+
+ "           \"volume_mounts\": [],"+
+  "          \"label\": \"iotf-service\","+
+   "         \"provider\": null,"+
+    "        \"plan\": \"iotf-service-free\","+
+     "       \"name\": \"scavengerApp-iotf-service\","+
+      "      \"tags\": ["+
+       "         \"internet_of_things\","+
+        "        \"Internet of Things\","+
+         "       \"ibm_created\","+
+          "      \"ibm_dedicated_public\","+
+           "     \"lite\""+
+            "]"+
+"        }"+
+ "   ],"+
+  "  \"AvailabilityMonitoring\": ["+
+   "     {"+
+    "        \"credentials\": {"+
+     "           \"cred_url\": \"https://perfbroker.ng.bluemix.net\","+
+      "          \"token\": \"QItDpKaso7ZUjRB1VjNow8aP0bB5PZfrdxAhUcAhHRNc++51qVmaqtDtn2fTxmWrBfuyTbnyIRp8Do5ul1ZJFQwlyL9FJGOZaUe1PFBqIzQ=\""+
+       "     },"+
+        "    \"syslog_drain_url\": null,"+
+         "   \"volume_mounts\": [],"+
+          "  \"label\": \"AvailabilityMonitoring\","+
+           " \"provider\": null,"+
+"            \"plan\": \"Lite\","+
+ "           \"name\": \"availability-monitoring-auto\","+
+  "          \"tags\": ["+
+   "             \"ibm_created\","+
+    "            \"bluemix_extensions\","+
+     "           \"dev_ops\","+
+      "          \"lite\""+
+       "     ]"+
+        "}"+
+"    ]"+
+"}";*/
+    if (envServices == null)
       return null;
 
     JsonObject vcapServices = null;

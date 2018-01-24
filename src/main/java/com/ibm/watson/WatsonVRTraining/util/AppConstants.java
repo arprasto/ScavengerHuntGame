@@ -68,19 +68,8 @@ public class AppConstants
 			iot_device_id=LaunchApp.getLoadedProperties().getProperty("iot_device_id").trim(),
 			iot_Authentication_Token=LaunchApp.getLoadedProperties().getProperty("iot_Authentication_Token").trim(),
 			iot_Authentication_Method=LaunchApp.getLoadedProperties().getProperty("iot_Authentication_Method").trim(),
-			iot_event_for_img_base64=LaunchApp.getLoadedProperties().getProperty("iot_event_for_img_base64").trim(),
-			
-			/*
-			 * allowable set of objects to capture images of
-			 */
-			allowable_obj_set[] = LaunchApp.getLoadedProperties().getProperty("allowable_obj_set").trim().split(","),
-
-			/*
-	    	 * get random objects for which imgs has to be captured for
-	    	 */
-	    	random_img_obj_str=getRandomImgObjString(allowable_obj_set,AppConstants.possible_number_of_obj);
-			;
-	
+			iot_event_for_img_base64=LaunchApp.getLoadedProperties().getProperty("iot_event_for_img_base64").trim();
+				
 			/*
 			 * camera resolution
 			 * can be one of the following
@@ -91,17 +80,11 @@ public class AppConstants
 			 */
 			public static int camera_width = Integer.valueOf(LaunchApp.getLoadedProperties().getProperty("camera_width","320").trim()),
 			camera_height = Integer.valueOf(LaunchApp.getLoadedProperties().getProperty("camera_height","240").trim()),
-			
-			/*
-			 * actual number of allowable objects which will be selected randomly from allowable_obj_set for a particular app session
-			 * value(possible_number_of_obj) <= size(allowable_obj_set)
-			 */
-			possible_number_of_obj = Integer.valueOf(LaunchApp.getLoadedProperties().getProperty("possible_number_of_obj","3").trim()),
-			
+						
 			/*
 			 * number of classifiers to be created in single run of training app
 			 */
-			classifier_count = Integer.valueOf(LaunchApp.getLoadedProperties().getProperty("possible_number_of_obj","1").trim()),
+			classifier_count = Integer.valueOf(LaunchApp.getLoadedProperties().getProperty("classifier_count","1").trim()),
 			
 			/*
 			 * number of positive images needed to create each custom classifier
@@ -133,30 +116,6 @@ public class AppConstants
 					vr_process_img_dir.setWritable(true);
 				}
 	}
-	
-	private static String getRandomImgObjString(String[] allowable_obj_set, int possible_number_of_obj) {
-		String obj_str = "";
-		int nxt,i=0;
-		Set<Integer> random_num=new HashSet<Integer>();
-		if(possible_number_of_obj>allowable_obj_set.length){
-			possible_number_of_obj = allowable_obj_set.length;
-		}
-		
-		for(int j=0;;j++){
-			nxt = new Random().nextInt(allowable_obj_set.length);
-			if(!random_num.contains(new Integer(nxt)))
-			{
-			obj_str = allowable_obj_set[nxt]+". "+obj_str;
-			random_num.add(nxt);
-			if(random_num.size()==3) break;
-			}
-			
-		}
-
-		System.out.println("allowable set of objs is : "+obj_str);
-		return obj_str;
-	}
-
 	
 	/*public static void main(String[] arg)
 	{

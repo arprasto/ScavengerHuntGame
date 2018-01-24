@@ -65,7 +65,7 @@ public class ImageTrainingApp {
 		tts.playTextToSpeech("to train the model you need to give at least twenty or more images for each classifier. the more clear images"
         		+ "you give. will increase the prediction accuracy of image. ");
 		
-		int i=1;
+		int i=0;
 		while(i<=AppConstants.classifier_count){
        	/*get the custom classifier name which we are going to create*/
        	String class_name = null,negative_zip=null;
@@ -159,7 +159,7 @@ public class ImageTrainingApp {
 			}	
 			i++;
 			if(i == AppConstants.classifier_count){
-				tts.playTextToSpeech("Thanks for using this application. Hoping to see you soon on IBM bluemix");
+				tts.playTextToSpeech("Thanks for using this application. Hoping to see you soon on IBM Cloud.");
 				System.exit(0);
 			}
 		}

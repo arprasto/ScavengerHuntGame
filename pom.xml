@@ -8,7 +8,7 @@
   <packaging>jar</packaging>
   
 
-  <name>scavengerHunt</name>
+  <name>WatsonVRTrainingApp</name>
   <url>http://maven.apache.org</url>
 
   <properties>

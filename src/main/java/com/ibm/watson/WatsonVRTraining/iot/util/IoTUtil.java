@@ -117,7 +117,6 @@ class MyNewCommandCallback implements CommandCallback, Runnable {
 					PhotoCaptureFrame.getPhotoesJFrame().repaint();
 					score = score + obj.getScore();
 					}
-					PhotoCaptureFrame.getScoreLabel().setText("SCORE:"+score);
 				}
 
 		while(true) {
@@ -137,7 +136,6 @@ class MyNewCommandCallback implements CommandCallback, Runnable {
 					PhotoCaptureFrame.getImagebeingProcessedLabel().setText("PROCESSING IMAGES:0");
 					PhotoCaptureFrame.getImageRemainingProcessingLabel().setText("REMAINIG IMAGES:"+WatchDir.queue.size());
 					score = score+db_rec.getScore();
-					PhotoCaptureFrame.getScoreLabel().setText("SCORE:"+score);
 				}
 				
 				if(cmd.getCommand().equals("checkForPublishIoT")){
@@ -152,7 +150,6 @@ class MyNewCommandCallback implements CommandCallback, Runnable {
 						JsonObject event_payload = new JsonObject();
 	            		event_payload.addProperty("img_base64",new Base64EncoderDecoder().encodeFileToBase64Binary(new File(uri)));
 	            		event_payload.addProperty("img_id", new File(uri).getName());
-	            		event_payload.addProperty("random_img_obj_str",AppConstants.random_img_obj_str);
 	            		event_payload.addProperty("app_id",AppConstants.unique_app_id);
 						PredictionApp.getInstance().iotObj.publishEvent(event_payload);
 					} catch (InterruptedException e) {

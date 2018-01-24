@@ -27,14 +27,14 @@ import java.util.logging.Logger;
 
 import com.ibm.watson.WatsonVRTraining.ImageTrainingApp;
 import com.ibm.watson.WatsonVRTraining.util.AppConstants;
-import com.ibm.watson.WatsonVRTraining.util.ScavengerException;
+import com.ibm.watson.WatsonVRTraining.util.TrainingAppException;
 import com.ibm.watson.developer_cloud.visual_recognition.v3.model.ClassifierOptions;
 import com.ibm.watson.developer_cloud.visual_recognition.v3.model.VisualClassifier;
 import com.ibm.watson.developer_cloud.visual_recognition.v3.model.VisualClassifier.VisualClass;
 
 public class ImageTraining {
 	Logger LOGGER = Logger.getLogger(ImageTraining.class.getName());
-	synchronized public void createClassifier(String class_name,String positiveZipPath,String negativeZipPath) throws ScavengerException
+	synchronized public void createClassifier(String class_name,String positiveZipPath,String negativeZipPath) throws TrainingAppException
 	{
 		
 	    ClassifierOptions classifierOptions = new ClassifierOptions.Builder().classifierName(AppConstants.vr_classifier_name)
@@ -63,7 +63,7 @@ public class ImageTraining {
 		    			LOGGER.log(Level.INFO," found preexisting "+classifier_id+"."+claz.getName());
 		    			ImageTrainingApp.getInstance().tts.playTextToSpeech("looks like given class name already exists. Please try giving different class name.");
 		    			//System.exit(0);
-		    			throw new ScavengerException();
+		    			throw new TrainingAppException();
 		    		}
 		    		else if(cnt==classifier.getClasses().size()){
 		    			update_classifier_flage = true;
@@ -81,7 +81,9 @@ public class ImageTraining {
 	    	LOGGER.log(Level.INFO,"creating new classifier "+classifierOptions.classifierName());
 	    	ImageTrainingApp.getInstance().tts.playTextToSpeech("looks like you are training very first time. Let me train the model for you.");
 	    	VisualClassifier vc = ImageTrainingApp.getInstance().vr_svc.getVRInstance().createClassifier(classifierOptions).execute();
+	    	int count=0;
 			while(true){
+				count++;
 				String res = null;
 				try {
 					Thread.sleep(6000);
@@ -91,26 +93,27 @@ public class ImageTraining {
 						e.printStackTrace();
 						ImageTrainingApp.getInstance().tts.playTextToSpeech("classifier is being trained. please try using it after some time");
 						//System.exit(0);
-		    			throw new ScavengerException();
+		    			throw new TrainingAppException();
 					}
-					if(res.toLowerCase().contains("training")){
+					if((count == 2 && res.toLowerCase().contains("training")) || res.toLowerCase().contains("training")){
 						ImageTrainingApp.getInstance().tts.playTextToSpeech("please wait classifier is being trained.");
 					}
-					else if(res.toLowerCase().contains("ready")){
-						ImageTrainingApp.getInstance().tts.playTextToSpeech("classifier has been trained now. To create another classifier you need to rerun this application.");
+					else if((count == 2 && res.toLowerCase().contains("ready")) || res.toLowerCase().contains("ready")){
+						ImageTrainingApp.getInstance().tts.playTextToSpeech("classifier has been trained now.");
 						//System.exit(0);
-		    			throw new ScavengerException();
+		    			throw new TrainingAppException();
 					}
-					else if(res.toLowerCase().contains("fail")){
-						ImageTrainingApp.getInstance().tts.playTextToSpeech("there was some error while creating classifier. Please try again later.");
+					else if((count == 2 && res.toLowerCase().contains("fail")) || res.toLowerCase().contains("fail")){
+						ImageTrainingApp.getInstance().tts.playTextToSpeech("there was some error while creating classifier. Please retry again later.");
 						ImageTrainingApp.getInstance().vr_svc.getVRInstance().deleteClassifier(vc.getId());
 						//System.exit(0);
-		    			throw new ScavengerException();
+		    			throw new TrainingAppException();
 					}
-					else{
-						ImageTrainingApp.getInstance().tts.playTextToSpeech("System will exit now. Please try again later.");
+					
+					if(count == 3){
+						ImageTrainingApp.getInstance().tts.playTextToSpeech("classifier is being trained. please try using it after some time.");
 						//System.exit(0);
-		    			throw new ScavengerException();
+		    			throw new TrainingAppException();
 					}
 				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block
@@ -123,7 +126,9 @@ public class ImageTraining {
 	    	LOGGER.log(Level.INFO,"updating classifier "+classifierOptions.classifierName());
 	    	ImageTrainingApp.getInstance().tts.playTextToSpeech("Let me update classifier for you.");
 	    	VisualClassifier vc = ImageTrainingApp.getInstance().vr_svc.getVRInstance().updateClassifier(classifier_id, classifierOptions).execute();
-			while(true){
+			int count=0;
+	    	while(true){
+	    		count++;
 				String res = null;
 				try {
 					Thread.sleep(6000);
@@ -133,26 +138,26 @@ public class ImageTraining {
 						e.printStackTrace();
 						ImageTrainingApp.getInstance().tts.playTextToSpeech("classifier is being trained. please try using it after some time");
 						//System.exit(0);
-		    			throw new ScavengerException();
+		    			throw new TrainingAppException();
 					}
-					if(res.toLowerCase().contains("training")){
+					if((count==2 && res.toLowerCase().contains("training")) || res.toLowerCase().contains("training")){
 						ImageTrainingApp.getInstance().tts.playTextToSpeech("please wait classifier is being trained.");
 					}
-					else if(res.toLowerCase().contains("ready")){
+					else if((count==2 && res.toLowerCase().contains("ready")) || res.toLowerCase().contains("ready")){
 						ImageTrainingApp.getInstance().tts.playTextToSpeech("classifier has been trained now. To create another classifier you need to rerun this application.");
 						//System.exit(0);
-		    			throw new ScavengerException();
+		    			throw new TrainingAppException();
 					}
-					else if(res.toLowerCase().contains("fail")){
+					else if((count==2 && res.toLowerCase().contains("fail")) || res.toLowerCase().contains("fail")){
 						ImageTrainingApp.getInstance().tts.playTextToSpeech("there was some error while creating classifier. Please try again later.");
 						ImageTrainingApp.getInstance().vr_svc.getVRInstance().deleteClassifier(vc.getId());
 						//System.exit(0);
-		    			throw new ScavengerException();
+		    			throw new TrainingAppException();
 					}
-					else{
-						ImageTrainingApp.getInstance().tts.playTextToSpeech("classifier creation will exit now. Please try again later.");
+					if(count == 3){
+						ImageTrainingApp.getInstance().tts.playTextToSpeech("classifier is being trained. please try using it after some time.");
 						//System.exit(0);
-		    			throw new ScavengerException();
+		    			throw new TrainingAppException();
 					}
 				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block

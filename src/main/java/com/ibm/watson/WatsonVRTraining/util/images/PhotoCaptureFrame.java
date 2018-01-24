@@ -45,7 +45,7 @@ import com.ibm.watson.WatsonVRTraining.util.AppConstants;
 public class PhotoCaptureFrame extends JFrame {
 	JPanel jp = null,headerPanel=null;
 	JFrame f = null;
-	JLabel ImageRemainingProcessingLabel=null,ImagebeingProcessedLabel=null,appIDLabel=null,scoreLabel=null;
+	JLabel ImageRemainingProcessingLabel=null,ImagebeingProcessedLabel=null,appIDLabel=null;
 	Logger log = Logger.getLogger(PhotoCaptureFrame.class.getName());
 	private static PhotoCaptureFrame obj = null;
 	PhotoCaptureFrame(){
@@ -91,16 +91,11 @@ public class PhotoCaptureFrame extends JFrame {
     	appIDLabel.setHorizontalAlignment(SwingConstants.LEFT);
     	appIDLabel.setFont(new Font("Arial",Font.BOLD,13));
 
-    	scoreLabel = new JLabel(" SCORE:0");
-    	scoreLabel.setHorizontalAlignment(SwingConstants.LEFT);
-    	scoreLabel.setFont(new Font("Arial",Font.BOLD,13));
-
     	headerPanel = new JPanel(new FlowLayout());
     	headerPanel.add(ImageRemainingProcessingLabel);
     	headerPanel.add(ImagebeingProcessedLabel);
     	headerPanel.add(btn);
     	headerPanel.add(appIDLabel);
-    	headerPanel.add(scoreLabel);
     	headerPanel.setSize(new Dimension(getWidth(),10));
     	
     	
@@ -115,14 +110,7 @@ public class PhotoCaptureFrame extends JFrame {
         f.setPreferredSize(new Dimension(dim.width/2-30,dim.height-60));
         f.setVisible(true);
 	}
-	
-	public static JLabel getScoreLabel(){
-		if(obj == null){
-			obj = new PhotoCaptureFrame();
-		}
-		return obj.scoreLabel;		
-	}
-	
+		
 	public static JLabel getImageRemainingProcessingLabel()
 	{
 		if(obj == null){

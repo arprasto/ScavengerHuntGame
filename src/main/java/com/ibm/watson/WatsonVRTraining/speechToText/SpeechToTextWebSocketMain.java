@@ -129,7 +129,7 @@ public class SpeechToTextWebSocketMain {
                 	/*
                 	 * get random objects for which imgs has to be captured for
                 	 */
-                	JavaImageCapture startCap = new JavaImageCapture(AppConstants.vr_process_img_dir,"tmp",PredictionApp.getInstance(),AppConstants.time_frame,AppConstants.random_img_obj_str);
+                	JavaImageCapture startCap = new JavaImageCapture(AppConstants.vr_process_img_dir,"tmp",PredictionApp.getInstance(),AppConstants.time_frame);
 					PhotoCaptureFrame.getPhotoesJFrame().setVisible(true);
 					SwingUtilities.invokeLater(startCap);
                 }

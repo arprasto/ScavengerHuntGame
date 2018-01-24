@@ -54,7 +54,7 @@ import com.ibm.watson.WatsonVRTraining.ImageTrainingApp;
 import com.ibm.watson.WatsonVRTraining.PredictionApp;
 import com.ibm.watson.WatsonVRTraining.util.CommandsUtils;
 import com.ibm.watson.WatsonVRTraining.util.AppConstants;
-import com.ibm.watson.WatsonVRTraining.util.ScavengerException;
+import com.ibm.watson.WatsonVRTraining.util.TrainingAppException;
 import com.ibm.watson.WatsonVRTraining.util.ThreadMessage_hook;
 import com.ibm.watson.WatsonVRTraining.visualrecognition.ImageTraining;
 
@@ -71,7 +71,7 @@ public class JavaImageCapture extends JFrame implements Runnable, WebcamListener
 	private JLabel timeRemainingLabel = null;
 	private JPanel timeRemainingPanel = null;
 	private File img_capture_tmp_dir = null;
-	private String img_file_prefix = null,random_img_obj_str=null,negative_zip=null;
+	private String img_file_prefix = null,negative_zip=null;
 	private Object invoking_ref = null;
 	private long camera_visible_time_frame = 0;
 	private JFrame main_window = null;
@@ -79,13 +79,12 @@ public class JavaImageCapture extends JFrame implements Runnable, WebcamListener
 	public ArrayList<File> capturedImages = new ArrayList<File>();
 	public EventListenerList images_lst = new EventListenerList();
 	
-	public JavaImageCapture(File img_capture_tmp_dir, String img_file_prefix,Object ref,long camera_visible_time_frame,String random_img_obj_str)
+	public JavaImageCapture(File img_capture_tmp_dir, String img_file_prefix,Object ref,long camera_visible_time_frame)
 	{
 		this.img_capture_tmp_dir = img_capture_tmp_dir;
 		this.img_file_prefix = img_file_prefix;
 		this.invoking_ref = ref;
 		this.camera_visible_time_frame = camera_visible_time_frame;
-		this.random_img_obj_str = random_img_obj_str;
 	}
 	
 	public JavaImageCapture(File img_capture_tmp_dir, String img_file_prefix,Object ref,String negative_zip) {
@@ -206,7 +205,7 @@ public class JavaImageCapture extends JFrame implements Runnable, WebcamListener
 						cmdUtils.executeCommand("bash","-c","rm "+AppConstants.vr_train_img_dir_path+"/"+img_file_prefix+"*.jpg");
 						try {
 							new ImageTraining().createClassifier(img_file_prefix,AppConstants.vr_train_img_dir_path+"/"+img_file_prefix+"_positive_examples.zip",negative_zip);
-						} catch (ScavengerException e1) {
+						} catch (TrainingAppException e1) {
 							e1.printStackTrace();
 							webcam.close();
 							webcam.shutdown();
@@ -241,8 +240,7 @@ public class JavaImageCapture extends JFrame implements Runnable, WebcamListener
 			public void run() {
 				if(invoking_ref instanceof PredictionApp) {
 					PredictionApp.getInstance().tts.playTextToSpeech("you can click anywhere on the camera capture window to capture the image. "
-							+ " you have "+camera_visible_time_frame/1000+". seconds to capture the images. "
-									+ " you need to capture images that should contain objects like "+random_img_obj_str);
+							+ " you have "+camera_visible_time_frame/1000+". seconds to capture the images. ");
 				}
 				if(invoking_ref instanceof ImageTrainingApp){
 					ImageTrainingApp.getInstance().tts.playTextToSpeech("you can click anywhere on the Camera window to capture the image. once image count reaches to twenty or more, image classifier will be automatically created.");
