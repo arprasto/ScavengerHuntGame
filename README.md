@@ -8,7 +8,7 @@ In this code pattern we will help to create a Watson Visual Recognition Image tr
 4. Watson IoT
 5. Cloudant NoSQL storage service
 
-For quick intro see <a href="src/extresources/images/zoom_0.mp4">this vedio</a>
+For quick intro see <a href="src/extresources/images/intro.mp4">this video</a>
 
 This code pattern consists of below two applications:
 1. Training App(to create and train a new custom classifier using Watson's VR)
@@ -90,7 +90,7 @@ How to build and run it:
 1. Create an properties file similar to sample-properties.properties provided.
 2. Update Watson bluemix credentials in for each service in above created property file.
 3. Clone this application code into your local env using 'git clone https://github.com/arprasto/WatsonVRTrainingApp'
-3. Run the maven build through 'mvn clean install'. This will create 3 jars(one with dependencies, one with app code binaries and one containing both(WatsonVRTrainingApp_common.jar))
+3. Run the maven build through 'mvn clean install'. This will create 3 jars(one with dependencies, one with app code binaries and one containing both(WatsonVRTrainingApp-0.0.1-jar-with-dependencies.jar))
 4. Main class to start any of above mentioned app is com.ibm.watson.WatsonVRTraining.LaunchApp. 
 
 You can run any of below application:
@@ -98,14 +98,14 @@ You can run any of below application:
 a. Running the Training app
 
 	1. run the below java command on your shell prompt:
-	java -cp ${work_dir}/target/WatsonVRTrainingApp_common.jar com.ibm.watson.WatsonVRTraining.LaunchApp sample-properties.properties trainApp
+	java -cp ${work_dir}/target/WatsonVRTrainingApp-0.0.1-jar-with-dependencies.jar com.ibm.watson.WatsonVRTraining.LaunchApp sample-properties.properties trainApp
 	2. Please listen the announce message from STT service and create custom image classifier using launched java web cam.  
 	3. After creating the classifier this app will automatically exit.
 
 b. Running the Prediction app
 
 	1. run the below java command on your shell prompt:
-	java -cp ${work_dir}/target/WatsonVRTrainingApp_common.jar com.ibm.watson.WatsonVRTraining.LaunchApp sample-properties.properties predictionApp
+	java -cp ${work_dir}/target/WatsonVRTrainingApp-0.0.1-jar-with-dependencies.jar com.ibm.watson.WatsonVRTraining.LaunchApp sample-properties.properties predictionApp
 	2. To start the prediction app your voice will be recognized through Watson STT service to recognize any of key word like:'prediction app' or 'result app'.
 	2. This will connect your device to Watson IoT and captured images will be stored in configured CLOUDANT DB.
 	3. To exit from this app your voice will be recognized through Watson STT service to recognize any of key word: 'exit' or 'i am done' or 'i'm done'.
